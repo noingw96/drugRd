@@ -84,7 +84,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 页面元素 **/
 .layui-btn, .layui-input, .layui-textarea, .layui-upload-button, .layui-select{outline: none; -webkit-transition: border-color .3s cubic-bezier(.65,.05,.35,.5); transition: border-color .3s cubic-bezier(.65,.05,.35,.5); -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
 
-/* 引用 */.layui-elem-quote{margin-bottom: 10px; padding: 15px; line-height: 22px; border-left: 5px solid rgba(0,150,136,0.5); border-radius: 0 2px 2px 0; background-color: rgba(0,0,0,0.3);}
+/* 引用 */.layui-elem-quote{margin-bottom: 10px; padding: 15px; line-height: 22px;  border-radius: 28px; background-color: rgba(0,0,0,0.3);}
 .layui-quote-nm{border-color: #e2e2e2; border-style: solid; border-width: 1px; border-left-width: 5px; background: none;}
 /* 字段集合 */.layui-elem-field{margin-bottom: 10px; padding: 0; border: 1px solid #e2e2e2;}
 .layui-elem-field legend{margin-left: 20px; padding: 0 10px; font-size: 20px; font-weight: 300;}
