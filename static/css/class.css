@@ -1,3 +1,138 @@
 .all-class{
     padding: 20px;
 }
+.category {
+    font-size: 16px;
+    display: inline-block;
+    width: 140px;
+    height: 40px;
+    border-radius: 100px;
+    margin: 10px;
+    padding: 9px;
+    text-align: center;
+    color: #1e4c7b;
+    background: #f2f2f2;
+    box-sizing: border-box;
+    opacity: 0.9;
+    cursor: pointer;
+    font-weight: 800;
+}
+.category:hover{
+    box-shadow: 2px 0px 12px 2px #4cbbf0;
+}
+.drug-list{
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    clear: both;
+}
+.drug-item{
+    position: relative;
+    width: 150px;
+    float: left;
+    height: 150px;
+    border-radius: 50%;
+    background: white;
+    color: #01AAED;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 100px 50px 0;
+    overflow: hidden;
+    cursor: pointer;
+}
+.drug-item-img{
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+}
+.drug-item-name{
+    position: absolute;
+    top: 58px;
+    width: 150px;
+    text-align: center;
+}
+.load-more{
+    display: none;
+    cursor: pointer;
+    margin: 0 auto;
+    width: 200px;
+    height: 40px;
+    box-sizing: content-box;
+    border: 2px solid #ebeff2;
+    background: #b2b2b2;
+    font-size: 17px;
+    text-align: center;
+    line-height: 37px;
+    letter-spacing: 5px;
+}
+.load-more:after{
+    content: '+';
+    font-size: 20px;
+}
+.load-more:hover{
+    box-shadow: 1px 2px 4px 3px #32587d;
+}
+.detail-page{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    display: none;
+}
+.detail-main{
+    position: relative;
+    width: 690px;
+    height: 368px;
+    background: #fff;
+    margin: 0 auto;
+    top: 20%;
+    color: #000;
+}
+.detail-content{
+    width: 80%;
+    height: 100%;
+    position: relative;
+    margin: 0 auto;
+}
+.detail-img img{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 80px;
+}
+.detail-right {
+    left: 250px;
+    position: absolute;
+    top: 80px;
+}
+.detail-right p{
+    margin-bottom: 10px;
+}
+.span1{
+    color: #999;
+    display: inline-block;
+    width: 80px;
+}
+.span2{
+    display: inline-block;
+    width: 200px;
+    vertical-align: top;
+}
+.close{
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 40px;
+    height: 40px;
+    font-size: 34px;
+    font-weight: 100;
+    border: 2px solid #d5cdcd;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 35px;
+    color: #fff;
+    cursor: pointer;
+}
