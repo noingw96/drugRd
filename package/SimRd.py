@@ -10,8 +10,8 @@ def clearUser(list):
     return new_user
 #利用余弦相似度进行推荐:平均时间0.10868
 def search(results,main):
-    searchResult=[]
-    sql = 'select * FROM erwei'
+    # searchResult=[]
+    # sql = 'select * FROM erwei'
     allData=[]
     aim={}
     similarResult=[]

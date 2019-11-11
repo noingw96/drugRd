@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>药材推荐系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
+    <link rel="stylesheet" href="../static/css/class.css">
+    <style>
+        .content{
+            padding: 0 126px;
+        }
+    </style>
+</head>
+<body>
+<div class="detail-page">
+    <div class="detail-main">
+        <div class="close">x</div>
+        <div class="detail-content">
+            <div class="detail-img">
+                <img src="../static/images/drugItem.jpg" alt="" id="myImg">
+            </div>
+            <div class="detail-right">
+                <p>
+                    <span class="span1">药材名:</span>
+                    <span class="span2" id="name">罗汉果</span>
+                </p>
+                <p>
+                    <span class="span1">别名:</span>
+                    <span class="span2" id="othername">拉汉果,假苦瓜,光果木鳖,金不换,罗汉表,裸龟巴</span>
+                </p>
+                <p>
+                    <span class="span1">产新时间:</span>
+                    <span class="span2" id="newtime">十月</span>
+                </p>
+                <p>
+                    <span class="span1">产区分布:</span>
+                    <span class="span2" id="position">广西</span>
+                </p>
+                <p>
+                    <span class="span1">产品特点:</span>
+                    <span class="span2" id="spec">易储存,易变色走油,易受旱情影响,生长期1-3年,家种主供,茶饮</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 顶部开始 -->
+<div class="header">
+</div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<div class="wrapper">
+    <!-- 左侧菜单开始 利用load引入inc中公共部分 -->
+    <!--<div class="left-nav"></div>-->
+    <!-- 左侧菜单结束 -->
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="content">
+            <!-- 右侧内容框架，更改从这里开始 -->
+            <div class="all-class">
+                <div class="category" data-id="1001">加工类</div>
+                <div class="category" data-id="1002">动物类</div>
+                <div class="category" data-id="1003">叶类</div>
+                <div class="category" data-id="1004">果实籽仁类</div>
+                <div class="category" data-id="1005">树皮类</div>
+                <div class="category" data-id="1006">树脂类</div>
+                <div class="category" data-id="1007">根茎类</div>
+                <div class="category" data-id="1008">矿物类</div>
+                <div class="category" data-id="1009">花类</div>
+                <div class="category" data-id="1010">菌藻类</div>
+                <div class="category" data-id="1011">藤木类</div>
+                <div class="category" data-id="1012">全草类</div>
+            </div>
+            <fieldset class="layui-elem-field layui-field-title site-title">
+                <legend><a name="default">中药材品种</a></legend>
+            </fieldset>
+            <ul class="drug-list">
+                <!--<li>-->
+                    <!--<div class="drug-item" data-id="1001">-->
+                        <!--<img class="drug-item-img" src="../static/images/drugItem.jpg" alt="">-->
+                        <!--<div class="drug-item-name">人参</div>-->
+                    <!--</div>-->
+                <!--</li>-->
+
+            </ul>
+            <div class="load-more">加载更多</div>
+            <!-- 右侧内容框架，更改从这里结束 -->
+        </div>
+    </div>
+    <!-- 右侧主体结束 -->
+</div>
+<!-- 中部结束 -->
+<!-- 底部开始 -->
+<div class="footer">
+
+</div>
+
+<!-- 底部结束 -->
+<!-- 背景切换开始 -->
+<div class="bg-changer"></div>
+<!-- 背景切换结束 -->
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    //引入公共部分
+//    $(".left-nav").load("inc/leftMenu");
+    $(".header").load("inc/header");
+    $(".bg-changer").load("inc/bgChange");
+</script>
+<script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
+<script src="../static/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../static/js/xadmin.js"></script>
+<script type="text/javascript" src="../static/js/class.js"></script>
+</body>
+</html>
