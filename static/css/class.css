@@ -25,6 +25,7 @@
     position: relative;
     overflow: hidden;
     clear: both;
+    left: 39px;
 }
 .drug-item{
     position: relative;
