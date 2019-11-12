@@ -6,15 +6,21 @@ import MySQLdb
 from package import SimRd,GetInfor
 import json
 from package import ProvinceDict
-db = MySQLdb.connect("127.0.0.1", "root", "root", "wzw", charset='utf8')
+db = MySQLdb.connect("127.0.0.1", "root", "root", "bishe", charset='utf8')
 if __name__=='__main__':
     start = time.clock()
     cursor = db.cursor()
-    sql = 'select * FROM positiondetail'
+    keyword = "安徽"
+    sql = 'select * FROM drugposition where position like "'+ keyword+'"'
     cursor.execute(sql)
     results = cursor.fetchall()
-    className = '加工类'
-    backData=ProvinceDict.getProvinceFloat(results)
-    for i in backData:
-        print(i)
+    sql2 = 'select * FROM drugbasedetail'
+    cursor.execute(sql2)
+    results2 = cursor.fetchall()
+    classRate = ProvinceDict.getProvinceClassNum(results,results2,keyword,8)
+    print(classRate)
+
+
+
+
     print("程序执行时间：",(time.clock()-start))

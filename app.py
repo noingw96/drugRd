@@ -88,6 +88,29 @@ def requestProvinceFloat():
             "Message":"省份数据仍在更新，请稍后"
         }
         return jsonify(elements=errMessage)
+
+@app.route('/ProvinceClassNum', methods=['POST', 'GET'])
+def requestProvinceClassNum():
+    keyword = request.args.get("province")
+    try:
+        cursor = db.cursor()
+        sql = 'select * FROM drugposition where position like "' + keyword + '"'
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        sql2 = 'select * FROM drugbasedetail'
+        cursor.execute(sql2)
+        results2 = cursor.fetchall()
+        classRate = ProvinceDict.getProvinceClassNum(results, results2, keyword, 8)
+        return jsonify(elements=classRate)
+    except:
+        errMessage = {
+            "errCode": "1004",
+            "Message": "有关于省市的药材分类数据仍在更新"
+        }
+        return jsonify(elements=errMessage)
+
+
+
 #二、页面内容
 #首页
 @app.route('/')

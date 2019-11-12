@@ -15,6 +15,14 @@
             height: 1000px;
             margin: auto;
         }
+        #columnEcharts{
+            height: 300px;
+            width: 400px;
+            position: absolute !important;
+            right: 0;
+            top: -19px;
+            transform: scale(1.0);
+        }
         #back{
             border-bottom: 1px solid;
             width: 59px;
@@ -69,8 +77,9 @@
             </div>
             <div class="tip-float">
                 <p class="first-p">北京-常见药材</p>
-                <p>薄荷油;红豆杉枝叶;鳖甲;蚕沙;冰片;牛黄;鱼鳔;黄金果;龙胆;猪宝;</p>
+                <p class="second-p">薄荷油;红豆杉枝叶;鳖甲;蚕沙;冰片;牛黄;鱼鳔;黄金果;龙胆;猪宝;</p>
             </div>
+            <div id="columnEcharts"></div>
             <!-- 右侧内容框架，更改从这里结束 -->
         </div>
     </div>
@@ -100,6 +109,7 @@
 <script type="text/javascript" src="../static/js/map/china.js"></script>
 <script>
     var data = [];
+    var tipFloatFlag = false;
     $.ajax({
         type:'get',
         url:'/requestProvinceFloat',
@@ -109,15 +119,14 @@
             data = ret.elements;
             console.log(ret);
             initEcharts("china", "中国");
+            initColumnChart();
         }
     })
     var myChart = echarts.init(document.getElementById('china-map'));
+    var columnChart = echarts.init(document.getElementById('columnEcharts'));
     var oBack = document.getElementById("back");
-
     var provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen'];
-
     var provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门'];
-
     var seriesData = [{
         name: '北京',
         value: 100
@@ -238,11 +247,10 @@
             }
         }
     }
-
+    var backData;
     // 初始化echarts
     function initEcharts(pName, Chinese_) {
         var tmpSeriesData = pName === "china" ? seriesData : [];
-        console.log(data)
         var option = {
             title: {
                 text: Chinese_ || pName,
@@ -253,9 +261,8 @@
                 trigger: 'item',
 //                formatter: '{b}<br/>{c} (p / km2)'
                 formatter:function (params) {
-//                    console.log(params.name)
-
-//                    return params.name + "：" + data[params.name];
+                    $(".first-p").text(params.name+'-常见药材');
+                    $(".second-p").text(data[params.name]);
                 },
             },
             series: [
@@ -297,21 +304,29 @@
             ]
 
         };
-
         myChart.setOption(option);
-
         myChart.off("click");
-
         if (pName === "china") { // 全国时，添加click 进入省级
             myChart.on('click', function (param) {
-                console.log(param.name);
-                // 遍历取到provincesText 中的下标  去拿到对应的省js
-                for(var i=0;i<data.length;i++){
-                    if(param.name === data[i].province){
-                        console.log(data[i].list);
-                        break;
-                    }
+                var data = {
+                    province:param.name
                 }
+                $.ajax({
+                    type:'get',
+                    url:'/ProvinceClassNum',
+                    data:data,
+                    headers:{"Content-Type":"application/json"},
+                    dataType:'json',
+                    success:function (ret) {
+                        backData=ret.elements;
+                        console.log(backData)
+                        columnChart.setOption({
+                            title: {
+                                text: '异步数据加载示例'
+                            },
+                        })
+                    }
+                })
             });
             myChart.on('dblclick', function (param) {
 //                console.log(param.name);
@@ -330,12 +345,113 @@
                     $("#box-title").html(provinceName);
                 }
             });
-
         } else { // 省份，添加双击 回退到全国
             myChart.on("dblclick", function () {
                 initEcharts("china", "中国");
             });
         }
+    }
+    function initColumnChart() {
+        var dataAxis = ["全草类", "加工类", "动物类", "叶类", "果实籽仁类", "根茎类", "花类", "菌藻类"];
+        var data = [60, 20, 26, 17, 7, 110, 65, 11];
+        var yMax = 150;
+        var dataShadow = [];
+        for (var i = 0; i < data.length; i++) {
+            dataShadow.push(yMax);
+        }
+        var optionColumnChart = {
+            title: {
+                text: '种类分布',
+                textStyle: {
+                    color: '#fff',
+                }
+//                subtext: 'Feature Sample: Gradient Color, Shadow, Click Zoom'
+            },
+            xAxis: {
+                data: dataAxis,
+                axisLabel: {
+//                    inside: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    show: false
+                },
+                z: 10
+            },
+            yAxis: {
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            dataZoom: [
+                {
+                    type: 'inside'
+                }
+            ],
+            series: [
+                { // For shadow
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {color: 'rgba(0,0,0,0.05)'}
+                    },
+                    barGap:'-100%',
+                    barCategoryGap:'40%',
+                    data: dataShadow,
+                    animation: false
+                },
+                {
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0, 0, 0, 1,
+                                [
+                                    {offset: 0, color: '#83bff6'},
+                                    {offset: 0.5, color: '#188df0'},
+                                    {offset: 1, color: '#188df0'}
+                                ]
+                            )
+                        },
+                        emphasis: {
+                            color: new echarts.graphic.LinearGradient(
+                                0, 0, 0, 1,
+                                [
+                                    {offset: 0, color: '#2378f7'},
+                                    {offset: 0.7, color: '#2378f7'},
+                                    {offset: 1, color: '#83bff6'}
+                                ]
+                            )
+                        }
+                    },
+                    data: data
+                }
+            ]
+        };
+
+        // Enable data zoom when user click bar.
+        var zoomSize = 6;
+        columnChart.on('click', function (params) {
+            console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+            columnChart.dispatchAction({
+                type: 'dataZoom',
+                startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+                endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+            });
+        });
+        columnChart.setOption(optionColumnChart);
     }
 
     // 展示对应的省
@@ -366,6 +482,9 @@
         script.id = scriptId;
         document.getElementsByTagName("head")[0].appendChild(script);
     };
+    function drawColumn() {
+        
+    }
 </script>
 <script type="text/javascript" src="../static/js/dist.js"></script>
 </body>
