@@ -17,7 +17,7 @@ if __name__=='__main__':
     sql2 = 'select * FROM drugbasedetail'
     cursor.execute(sql2)
     results2 = cursor.fetchall()
-    classRate = ProvinceDict.getProvinceClassNum(results,results2,keyword,8)
+    classRate = ProvinceDict.getProvinceClassNum(results,results2,keyword,12)
     print(classRate)
 
 

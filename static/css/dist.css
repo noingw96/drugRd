@@ -1,0 +1,56 @@
+#china-map {
+    width: 1000px;
+    height: 1000px;
+    margin: auto;
+}
+#columnEcharts{
+    height: 300px;
+    width: 400px;
+    position: fixed !important;
+    right: 0;
+    top: 57px;
+    transform: scale(1.0);
+}
+#lineEcharts{
+    height: 300px;
+    width: 400px;
+    position: fixed !important;
+    right: 0;
+    bottom: 0;
+    transform: scale(1.0);
+}
+#back{
+    border-bottom: 1px solid;
+    width: 59px;
+    cursor: pointer;
+}
+#back:hover{
+    color: red;
+    border-bottom: 1px solid red;
+}
+#box{
+    display:none;
+    background-color: goldenrod;
+    width: 180px;
+    height: 30px;
+}
+#box-title{
+    display:block;
+}
+.map {
+    width: 1000px;
+    height: 700px;
+    overflow: hidden;
+}
+.tip-float {
+    position: fixed;
+    left: 20px;
+    border: 1px solid #fff;
+    width: 200px;
+    padding: 20px;
+    background: rgba(0,0,0,0.5);
+    bottom: 100px;
+}
+.first-p{
+    margin-bottom: 10px;
+}

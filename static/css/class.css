@@ -108,6 +108,8 @@
     left: 250px;
     position: absolute;
     top: 80px;
+    overflow-y: auto;
+    height: 280px;
 }
 .detail-right p{
     margin-bottom: 10px;
