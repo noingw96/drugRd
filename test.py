@@ -11,15 +11,11 @@ if __name__=='__main__':
     start = time.clock()
     cursor = db.cursor()
     keyword = "安徽"
-    sql = 'select * FROM drugposition where position like "'+ keyword+'"'
+    username = '7180289'
+    sql = 'select * FROM loginuser where loginid = "' + username + '"'
     cursor.execute(sql)
-    results = cursor.fetchall()
-    sql2 = 'select * FROM drugbasedetail'
-    cursor.execute(sql2)
-    results2 = cursor.fetchall()
-    classRate = ProvinceDict.getProvinceClassNum(results,results2,keyword,12)
-    print(classRate)
-
+    results = cursor.fetchall()[0]
+    print(results[0])
 
 
 

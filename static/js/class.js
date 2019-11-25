@@ -87,5 +87,6 @@
             $("#myImg").attr('src',curObj.img);
         }
         $(".detail-page").show();
+        RecordUser(curObj.drugName);
     })
 })()

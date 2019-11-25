@@ -5,13 +5,92 @@
         <li class="layui-nav-item"><a href="/class">药材分类</a></li>
         <li class="layui-nav-item"><a href="/">药材资讯推荐</a></li>
         <li class="layui-nav-item"><a href="/dist">药材分布</a></li>
-        <li class="layui-nav-item">
+        <li class="layui-nav-item already-login" style="display:none">
             <a href="javascript:;">个人中心</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a href="">个人信息</a></dd>
                 <dd><a href="">切换帐号</a></dd>
-                <dd><a href="../static/login.html">退出</a></dd>
+                <dd><a href="javascript:void(0);" id="loginout">退出</a></dd>
             </dl>
         </li>
+        <li class="layui-nav-item no-login"><a href="/login">登录/注册</a></li>
     </ul>
 </div>
+<script>
+    var loginFlag = localStorage.getItem('islogin');
+    var alreadyLogin = document.querySelector('.already-login');
+    var noLogin = document.querySelector('.no-login');
+    if(loginFlag&&loginFlag!=""){
+        alreadyLogin.style.display='inline-block';
+        noLogin.style.display = 'none';
+    }
+    document.getElementById('loginout').addEventListener('click',function () {
+        localStorage.removeItem('islogin');
+        window.location.href = '/login';
+    })
+    //obj为触发日志事件的对象,记录用户日志
+    function RecordUser(obj) {
+        var userInfo;
+        var drugname = '';
+        var drugprefer=1;
+        var maxLength = 10;
+        var preferFlag = false;//偏好标识，标识在日志中存在该项
+        console.log(obj);
+        if(localStorage.getItem('userinfo')){
+            //获取用户日志
+            userInfo = JSON.parse(localStorage.getItem('userinfo'));
+            //存在于用户日志中
+            for(var i=0;i<userInfo.content.length;i++){
+                console.log('已存在');
+                if(userInfo.content[i].name==obj){
+                    drugname = obj;
+                    drugprefer = userInfo.content[i].prefer+1;
+                    //将新点击内容加到日志队列头部
+                    userInfo.content.splice(i,1);
+                    userInfo.content.push({
+                        name:drugname,
+                        prefer:drugprefer
+                    })
+                    preferFlag = true;
+                    break;
+                }
+            }
+            //不存在于用户日志中
+            if(!preferFlag){
+                //超过队列长度
+                if(userInfo.content.length == maxLength){
+                    console.log('满了');
+                    var minIndex=0;//最小权值的药材索引
+                    var minValue=10000;//最小权值，权值为兴趣度与队列索引的乘积
+                    userInfo.content.forEach(function (item,index) {
+                        var curValue = item.prefer * (index+1)*0.1;
+                        minValue = curValue < minValue ? curValue : minValue;
+                        minIndex = curValue < minValue ? index : minIndex;
+                    })
+                    userInfo.content.splice(minIndex,1);
+                    userInfo.content.push({
+                        name:obj,
+                        prefer:1
+                    })
+                }else {
+                    console.log('未满');
+                    userInfo.content.push({
+                        name:obj,
+                        prefer:1
+                    })
+
+                }
+            }
+        }else {
+            userInfo={
+                content:[]
+            };//初始化日志对象
+            userInfo.content.push({
+                name:obj,
+                prefer:1
+            })
+        }
+        localStorage.setItem('userinfo',JSON.stringify(userInfo));
+        console.log(userInfo.content)
+    }
+</script>

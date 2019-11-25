@@ -110,9 +110,47 @@ def requestProvinceClassNum():
         return jsonify(elements=errMessage)
 
 
+@app.route('/LoginCheck', methods=['POST', 'GET'])
+def loginCheck():
+    #接受post请求
+    data = request.get_data()
+    json_data = json.loads(data.decode("utf-8"))
+    username = json_data.get("username")
+    password = json_data.get("password")
+    flag = json_data.get("flag")
+    print(username,password,flag)
+    try:
+        cursor = db.cursor()
+        sql = 'select * FROM loginuser where loginid = "' + username + '"'
+        cursor.execute(sql)
+        results = cursor.fetchall()[0]
+        if results[1] == password:
+            backMessage={
+                "successCode": "2001",
+                "message": "登录成功",
+                "username":results[0],
+                "nickname":results[2],
+                "tel":results[3],
+                "address":results[4],
+                "createname":results[5],
+            }
+        else:
+            backMessage={
+                "errCode": "1005",
+                "message": "用户不存在或密码错误"
+            }
+        return jsonify(elements=backMessage)
+    except:
+        errMessage = {
+            "errCode": "1006",
+            "message": "用户不存在或密码错误"
+        }
+        return jsonify(elements=errMessage)
 
-#二、页面内容
-#首页
+
+
+#二、页面路由
+#首页-资讯页
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -127,9 +165,15 @@ def Drugclass():
 def Drugdist():
     return render_template('dist.html')
 
+#登录页
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+#注册页
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 
 

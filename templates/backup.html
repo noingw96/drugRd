@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>污泥监管平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__STATIC__/css/font.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
+    <link rel="stylesheet" href="__STATIC__/css/xadmin.css">
+    <link rel="stylesheet" href="__STATIC__/css/myboot.css">
+    <link rel="stylesheet" href="__STATIC__/css/mycss.css">
+    <!--<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="__STATIC__/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
+    <script src="__STATIC__/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__STATIC__/js/xadmin.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/bootstrap.min.js"></script>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="register-content">
+    <div class="register-title">
+        <h1>新用户注册</h1>
+    </div>
+    <form id="form-register" class="register-form" >
+        <div class="register-all">
+            <div class="line-control">
+                <label style="letter-spacing: 25px;">用户名</label>
+                <input type="text" placeholder="请输入用户名" class="form-input" name="username" id="username" autocomplete="off" value="">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 45px;">密码</label>
+                <input type="password" placeholder="请输入密码" class="form-input" name="password" id="password" autocomplete="off" value="">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 15px;">用户类型</label>
+                <select name="alluser" id="alluser" class="user-select">
+                    <option value="user1">产泥单位</option>
+                    <option value="user2">处理单位</option>
+                    <option value="user3">运输单位</option>
+                    <option value="user4">消纳单位</option>
+                    <option value="user5">监理单位</option>
+                </select>
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 5px;">注册单位名称</label>
+                <input type="text" placeholder="" class="form-input" name="unitname" id="unitname" autocomplete="off" style="width: 160px;">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 5px;">注册单位地址</label>
+                <input type="text" placeholder="" class="form-input" name="unitadd" id="unitadd" autocomplete="off" style="width: 220px;">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 15px;">法人姓名</label>
+                <input type="text" placeholder="" class="form-input" name="person" id="person" autocomplete="off" style="width: 130px;">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 5px;">法人联系方式</label>
+                <input type="text" placeholder="" class="form-input" name="persontel" id="persontel" autocomplete="off" style="width: 130px;">
+            </div>
+            <div class="line-control">
+                <label>注册单位联系方式</label>
+                <input type="text" placeholder="" class="form-input" name="unittel" id="unittel" autocomplete="off" style="width: 130px;">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 5px;">注册单位所属</label>
+                <input type="text" placeholder="" class="form-input" name="belongunit" id="belongunit" autocomplete="off">
+            </div>
+            <div class="line-control">
+                <label style="letter-spacing: 5px;">单位资质证明</label>
+                <input type='text' name='provetext' id='provetext' class='txt' style="color: black;margin-left: 30px;">
+                <input type='button' class='btn1' value='浏览...' style="color: black" name="liulan" id="liulan">
+                <input type="file"  class="file" id="prove" size="28" name="prove"
+                       onchange='document.getElementById("provetext").value=this.value' style="position: relative;">
+            </div>
+            <div class="shenbao2" style="text-align: left;margin-left: 180px;">
+                <button type="submit" id="shenbaobtn" class="btn btn-info">注册</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $("#shenbaobtn").on('click',function () {
+            $.ajax({
+                type:"POST",
+                url:"{:url('login/create')}",
+                data:$("#form-register").serialize(),
+                dataType:'json',
+                success:function (data) {
+                    alert(data.message);
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                },
+                error:function () {
+                    alert("服务器出错！");
+                }
+            })
+        });
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>药材推荐系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
+    <style>
+        /*用户注册*/
+        .register-title{
+            letter-spacing: 10px;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 35px;
+        }
+        .register-title h1{
+            font-size: 24px;
+            font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .register-content {
+            font-size: 15px;
+            /* margin-left: 200px; */
+            width: 600px;
+            margin: 0 auto;
+        }
+        form.register-form {
+            height: auto;
+        }
+        .form-input {
+            height: 27px;
+            width: 260px;
+            padding: 1px 6px;
+            margin-left: 30px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .line-control{
+            clear: both;
+            overflow: hidden;
+            margin: 23px 0;
+        }
+        .register-all {
+            text-align: center;
+        }
+        .line-control label{
+            font-weight: lighter;
+            width: 100px;
+            display: inline-block;
+            text-align-last: justify;
+            font-size: 18px;
+        }
+        .user-select option{
+            color: #103e84;
+        }
+        .span-select{
+            display: inline-block;
+            position: relative;
+            color: #fff;
+            font-size: 18px;
+        }
+        .province,.city{
+            border: 1px solid #c3d1db;
+            border-radius: 5px;
+            width: 137px;
+            line-height: 28px;
+            height: 28px;
+            color: #fff;
+            font-size: 14px;
+            margin-left: 2px;
+            text-align: center;
+            padding: 0;
+            background: #546bee;
+            margin-right: 18px;
+        }
+        .margin-left1{
+            margin-left: -42px;
+        }
+        .shenbao2 {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .btn{
+            padding: 6px 34px;
+            background-color: rgba(84, 107, 238,0.5);
+            border-color: #17bbd5;
+        }
+    </style>
+</head>
+<body>
+<!-- 顶部开始 -->
+<div class="header">
+</div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<div class="wrapper">
+    <!-- 左侧菜单开始 利用load引入inc中公共部分 -->
+    <!--<div class="left-nav"></div>-->
+    <!-- 左侧菜单结束 -->
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="content">
+            <!-- 右侧内容框架，更改从这里开始 -->
+            <div class="register-content">
+                <div class="register-title">
+                    新用户注册
+                </div>
+                <form id="form-register" class="register-form" >
+                    <div class="register-all">
+                        <div class="line-control">
+                            <label>登录账号</label>
+                            <input type="text" placeholder="" class="form-input" name="username" id="username" autocomplete="off" value="">
+                        </div>
+                        <div class="line-control">
+                            <label>昵称</label>
+                            <input type="text" placeholder="" class="form-input" name="password" id="nickname" autocomplete="off" value="">
+                        </div>
+                        <div class="line-control">
+                            <label>密码</label>
+                            <input type="password" placeholder="" class="form-input" name="password" id="password" autocomplete="off" value="">
+                        </div>
+                        <div class="line-control">
+                            <label>确认密码</label>
+                            <input type="password" placeholder="" class="form-input" name="password" id="password2" autocomplete="off" value="">
+                        </div>
+                        <div class="line-control">
+                            <label>联系方式</label>
+                            <input type="text" placeholder="" class="form-input" name="password" id="tel" autocomplete="off" value="">
+                        </div>
+                        <div class="line-control" style="margin-top: 30px">
+                            <span class="span-select margin-left1">
+                             省
+                                <select name="province" id="province" class="province">
+                                </select>
+                            </span>
+                            <span class="span-select">
+                                市
+                                <select name="city" id="city" class="city">
+                                    <option value="-2">所有市</option>
+                                </select>
+                             </span>
+                        </div>
+
+
+                        <div class="shenbao2">
+                            <button type="submit" id="registerbtn" class="btn btn-info">注册</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- 右侧内容框架，更改从这里结束 -->
+        </div>
+    </div>
+    <!-- 右侧主体结束 -->
+</div>
+<!-- 中部结束 -->
+<!-- 底部开始 -->
+<div class="footer">
+
+</div>
+<!-- 底部结束 -->
+<!-- 背景切换开始 -->
+<div class="bg-changer"></div>
+<!-- 背景切换结束 -->
+<script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+<script>
+    //引入公共部分
+    //        $(".left-nav").load("inc/leftMenu");
+    $(".header").load("inc/header");
+    $(".bg-changer").load("inc/bgChange");
+</script>
+<script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
+<script src="../static/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../static/js/xadmin.js"></script>
+<script type="text/javascript" src="../static/js/register.js"></script>
+<script type="text/javascript" src="../static/js/city/city.js"></script>
+<script>
+    $("#loginbtn").on('click',function () {
+        var userId = $("#username").val();
+        var pwd = $("#password").val();
+        var shenfen = $("#alluser").val();
+        var data = {
+            username:userId,
+            password:pwd,
+            flag:shenfen
+        }
+        //表单使用ajax提交
+        $.ajax({
+            type:'get',
+            url:"/LoginCheck",
+            headers:{"Content-Type":"application/json"},
+            data:data,
+            dataType:'json',
+            success:function (ret) {
+                var data = ret.elements;
+                if(data.successCode&&data.successCode=='2001'){
+                    var isLogin ={
+                        flag:true,
+                        time:new Date(),
+                        username:data.username,
+                        nickname:data.nickname,
+                        tel:data.tel,
+                        address:data.address,
+                        createname:data.createname,
+                    }
+                    localStorage.setItem('islogin',JSON.stringify(isLogin));
+                    alert('登录成功');
+                    window.location.href = '/class';
+                }else {
+                    alert(data.message);
+                }
+                console.log(ret);
+            },
+            error:function () {
+                alert("服务器出错！");
+            }
+        })
+    })
+    var provinceList=[];
+    var cityList=[];
+    function provinceInit(){
+        var optionProvince = '<option value="-1">所有省份</option>'
+        $.each(zNodes,function (i,val) {
+            if(val["pId"]=="-1"){
+                provinceList.push(val);
+                optionProvince+='<option value="'+val.name+'">'+val.name+'</option>'
+            }else if(val["grade"]=="2"){
+                cityList.push(val);
+            }
+        })
+//        console.log(provinceList);
+        $("#province").append(optionProvince);
+        $("#province").change(function () {
+            var province_id = '';
+            var val = $(this).val();
+            for(var i=0; i<provinceList.length; i++) {
+                if(val === provinceList[i].name) {
+                    province_id = provinceList[i].id;
+                }
+            }
+            var optionCity ='<option value="-2">所有市</option>';
+            $.each(cityList,function (i,val) {
+                if(val.pId == province_id){
+                    optionCity+='<option value="'+val.name+'">'+val.name+'</option>';
+                }
+            })
+            $("#city").html(optionCity);
+        })
+    }
+    provinceInit();
+</script>
+</body>
+</html>
