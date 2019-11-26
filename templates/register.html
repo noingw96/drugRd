@@ -87,6 +87,7 @@
             margin-top: 50px;
         }
         .btn{
+            width: 48px;
             padding: 6px 34px;
             background-color: rgba(84, 107, 238,0.5);
             border-color: #17bbd5;
@@ -119,7 +120,7 @@
                         </div>
                         <div class="line-control">
                             <label>昵称</label>
-                            <input type="text" placeholder="" class="form-input" name="password" id="nickname" autocomplete="off" value="">
+                            <input type="text" placeholder="" class="form-input" name="nickname" id="nickname" autocomplete="off" value="">
                         </div>
                         <div class="line-control">
                             <label>密码</label>
@@ -127,11 +128,11 @@
                         </div>
                         <div class="line-control">
                             <label>确认密码</label>
-                            <input type="password" placeholder="" class="form-input" name="password" id="password2" autocomplete="off" value="">
+                            <input type="password" placeholder="" class="form-input" name="password2" id="password2" autocomplete="off" value="">
                         </div>
                         <div class="line-control">
                             <label>联系方式</label>
-                            <input type="text" placeholder="" class="form-input" name="password" id="tel" autocomplete="off" value="">
+                            <input type="text" placeholder="" class="form-input" name="tel" id="tel" autocomplete="off" value="">
                         </div>
                         <div class="line-control" style="margin-top: 30px">
                             <span class="span-select margin-left1">
@@ -149,7 +150,7 @@
 
 
                         <div class="shenbao2">
-                            <button type="submit" id="registerbtn" class="btn btn-info">注册</button>
+                            <div id="registerbtn" class="btn btn-info">注册</div>
                         </div>
                     </div>
                 </form>
@@ -178,44 +179,39 @@
 <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
 <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../static/js/xadmin.js"></script>
-<script type="text/javascript" src="../static/js/register.js"></script>
+<!--<script type="text/javascript" src="../static/js/register.js"></script>-->
 <script type="text/javascript" src="../static/js/city/city.js"></script>
 <script>
-    $("#loginbtn").on('click',function () {
+    $("#registerbtn").on('click',function () {
         var userId = $("#username").val();
+        var nickname = $("#nickname").val();
         var pwd = $("#password").val();
-        var shenfen = $("#alluser").val();
+        var pwd2 = $("#password2").val();
+        var tel = $("#tel").val();
+        var province = $("#province").val();
+        var city = $("#city").val();
         var data = {
             username:userId,
+            nickname:nickname,
             password:pwd,
-            flag:shenfen
+            tel:tel,
+            address:province+'#'+city,
+            createtime:new Date().getTime()
         }
         //表单使用ajax提交
         $.ajax({
-            type:'get',
-            url:"/LoginCheck",
+            type:'post',
+            url:"/RegisterMsg",
             headers:{"Content-Type":"application/json"},
-            data:data,
+            data:JSON.stringify(data),
             dataType:'json',
             success:function (ret) {
-                var data = ret.elements;
-                if(data.successCode&&data.successCode=='2001'){
-                    var isLogin ={
-                        flag:true,
-                        time:new Date(),
-                        username:data.username,
-                        nickname:data.nickname,
-                        tel:data.tel,
-                        address:data.address,
-                        createname:data.createname,
-                    }
-                    localStorage.setItem('islogin',JSON.stringify(isLogin));
-                    alert('登录成功');
-                    window.location.href = '/class';
-                }else {
-                    alert(data.message);
+                var msg = ret.elements.message;
+                var code = ret.elements.code;
+                alert(msg);
+                if(code ==='2002'){
+                    window.location.href = '/login';
                 }
-                console.log(ret);
             },
             error:function () {
                 alert("服务器出错！");

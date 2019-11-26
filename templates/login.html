@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../static/css/font.css">
     <link rel="stylesheet" href="../static/css/xadmin.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
-    <link rel="stylesheet" href="../static/css/login.css">
+    <!--<link rel="stylesheet" href="../static/css/login.css">-->
 </head>
 <body>
 <!-- 顶部开始 -->
@@ -75,7 +75,7 @@
 <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
 <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../static/js/xadmin.js"></script>
-<script type="text/javascript" src="../static/js/login.js"></script>
+<!--<script type="text/javascript" src="../static/js/login.js"></script>-->
 <script>
     $("#loginbtn").on('click',function () {
         var userId = $("#username").val();
@@ -106,6 +106,7 @@
                         createname:data.createname,
                     }
                     localStorage.setItem('islogin',JSON.stringify(isLogin));
+                    localStorage.setItem('userinfo',data.userinfo);
                     alert('登录成功');
                     window.location.href = '/class';
                 }else {

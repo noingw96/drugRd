@@ -114,5 +114,34 @@
 <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../static/js/xadmin.js"></script>
 <script type="text/javascript" src="../static/js/class.js"></script>
+<script>
+    function timeFormat() {
+        var now = new Date();
+        return now.getFullYear()+"-"+(now.getMonth()+1)+"-"+ now.getDate()+" "+now.toLocaleTimeString();
+    }
+    $(window).bind('unload',function () {
+        var userinfo = localStorage.getItem('userinfo');
+        var user = JSON.parse(localStorage.getItem('islogin'));
+        var data = {
+            userid :user.username,
+            userinfo:userinfo,
+            time:timeFormat()
+        }
+        $.ajax({
+            async:false,
+            type:'post',
+            url:"/UpdateInfo",
+            headers:{"Content-Type":"application/json"},
+            data:JSON.stringify(data),
+            dataType:'json',
+            success:function (ret) {
+                console.log(ret)
+            },
+            error:function () {
+                alert("服务器出错！");
+            }
+        })
+    })
+</script>
 </body>
 </html>

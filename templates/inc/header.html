@@ -25,7 +25,9 @@
         noLogin.style.display = 'none';
     }
     document.getElementById('loginout').addEventListener('click',function () {
+        UpdateInfo();
         localStorage.removeItem('islogin');
+//        localStorage.removeItem('userinfo');
         window.location.href = '/login';
     })
     //obj为触发日志事件的对象,记录用户日志
@@ -93,4 +95,34 @@
         localStorage.setItem('userinfo',JSON.stringify(userInfo));
         console.log(userInfo.content)
     }
+    function timeFormat() {
+        var now = new Date();
+        return now.getFullYear()+"-"+(now.getMonth()+1)+"-"+ now.getDate()+" "+now.toLocaleTimeString();
+    }
+    function UpdateInfo() {
+        var userinfo = localStorage.getItem('userinfo');
+        var user = JSON.parse(localStorage.getItem('islogin'));
+        var data = {
+            userid :user.username,
+            userinfo:userinfo,
+            time:timeFormat()
+        }
+        $.ajax({
+            async:false,
+            type:'post',
+            url:"/UpdateInfo",
+            headers:{"Content-Type":"application/json"},
+            data:JSON.stringify(data),
+            dataType:'json',
+            success:function (ret) {
+                console.log(ret)
+            },
+            error:function () {
+                alert("服务器出错！");
+            }
+        })
+    }
+//    $(window).bind('unload',function () {
+//
+//    })
 </script>

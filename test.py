@@ -12,10 +12,11 @@ if __name__=='__main__':
     cursor = db.cursor()
     keyword = "安徽"
     username = '7180289'
-    sql = 'select * FROM loginuser where loginid = "' + username + '"'
+    address = '长沙'
+    sql = 'select * from userinfo where loginid ="7180289"'
     cursor.execute(sql)
-    results = cursor.fetchall()[0]
-    print(results[0])
+    results = cursor.fetchall()
+
 
 
 

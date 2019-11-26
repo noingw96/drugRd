@@ -125,6 +125,9 @@ def loginCheck():
         cursor.execute(sql)
         results = cursor.fetchall()[0]
         if results[1] == password:
+            sql2 = 'select * FROM userinfo where loginid = "' + username + '"'
+            cursor.execute(sql2)
+            info = cursor.fetchall()[-1]
             backMessage={
                 "successCode": "2001",
                 "message": "登录成功",
@@ -133,6 +136,7 @@ def loginCheck():
                 "tel":results[3],
                 "address":results[4],
                 "createname":results[5],
+                "userinfo":info[3]
             }
         else:
             backMessage={
@@ -147,6 +151,62 @@ def loginCheck():
         }
         return jsonify(elements=errMessage)
 
+@app.route('/RegisterMsg', methods=['POST', 'GET'])
+def registerMsg():
+    # 接受post请求
+    data = request.get_data()
+    json_data = json.loads(data.decode("utf-8"))
+    username = json_data.get("username")
+    password = json_data.get("password")
+    nickname = json_data.get("nickname")
+    tel = json_data.get("tel")
+    address = json_data.get("address")
+    createtime = json_data.get("createtime")
+    operdrug=''
+    print(username,password,nickname,tel,address,createtime)
+    try:
+        cursor = db.cursor()
+        sql = 'insert into loginuser (loginid,password,nickname,tel,useraddress,createtime) values("' + str(
+            username) + '","' + str(password) + '","' + str(nickname) + '","' + str(tel) + '","' + str(
+            address) + '","' + str(createtime) + '") '
+        cursor.execute(sql)
+        sql2 = 'insert into userinfo (loginid,time,operdrug) values("' + str(username) + '","' + str(
+            createtime) + '","' + str(operdrug) + '") '
+        cursor.execute(sql2)
+        backMessage = {
+            "code": "2002",
+            "message": "注册成功"
+        }
+        return jsonify(elements=backMessage)
+    except:
+        errMessage = {
+            "code": "1007",
+            "message": "账号已存在，请修改账号重新注册"
+        }
+        return jsonify(elements=errMessage)
+
+@app.route('/UpdateInfo', methods=['POST', 'GET'])
+def updateInfo():
+    data = request.get_data()
+    json_data = json.loads(data.decode("utf-8"))
+    userid = json_data.get("userid")
+    operdrug = json_data.get("userinfo")
+    time = json_data.get("time")
+    try:
+        cursor = db.cursor()
+        sql = "insert into userinfo (loginid,time,operdrug) values('" + userid + "','" + time + "','" + operdrug + "') "
+        cursor.execute(sql)
+        backMessage = {
+            "code": "2003",
+            "message": "更新日志成功"
+        }
+        return jsonify(elements=backMessage)
+    except:
+        errMessage = {
+            "code": "1008",
+            "message": "服务器忙，暂时无法更新日志"
+        }
+        return jsonify(elements=errMessage)
 
 
 #二、页面路由
