@@ -1,7 +1,7 @@
 # -*- encoding:utf-8 -*-
 from flask import Flask,jsonify,render_template,request
 from py2neo import Graph
-from package import SimRd,GetInfor,ProvinceDict
+from package import SimRd,GetInfor,ProvinceDict,PlantRd
 import time
 import MySQLdb
 import json
@@ -89,6 +89,7 @@ def requestProvinceFloat():
         }
         return jsonify(elements=errMessage)
 
+#获取省份药材分类数据
 @app.route('/ProvinceClassNum', methods=['POST', 'GET'])
 def requestProvinceClassNum():
     keyword = request.args.get("province")
@@ -109,7 +110,7 @@ def requestProvinceClassNum():
         }
         return jsonify(elements=errMessage)
 
-
+#登录判断
 @app.route('/LoginCheck', methods=['POST', 'GET'])
 def loginCheck():
     #接受post请求
@@ -151,6 +152,7 @@ def loginCheck():
         }
         return jsonify(elements=errMessage)
 
+#注册信息
 @app.route('/RegisterMsg', methods=['POST', 'GET'])
 def registerMsg():
     # 接受post请求
@@ -185,6 +187,7 @@ def registerMsg():
         }
         return jsonify(elements=errMessage)
 
+#用户日志更新
 @app.route('/UpdateInfo', methods=['POST', 'GET'])
 def updateInfo():
     data = request.get_data()
@@ -208,6 +211,41 @@ def updateInfo():
         }
         return jsonify(elements=errMessage)
 
+#获取种植推荐页可视化配置
+@app.route('/getFlyOption', methods=['POST', 'GET'])
+def getFlyOption():
+    keyword = request.args.get("drugname")
+    try:
+        cursor = db.cursor()
+        sql = 'select * from drugposition where name ="' + keyword + '"'  # 获取药材种植区域
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        sql2 = 'select * from money where drugName ="' + keyword + '"'  # 获取药材市场价格
+        cursor.execute(sql2)
+        results2 = cursor.fetchall()
+        plantData = []
+        sql_str = ''  # 查找省份待拼接字符串
+        citylist = []
+        for i in results:
+            plantData.append({
+                "position": i[2],
+                "rate": i[3]
+            })
+        plantNeedData = sorted(plantData, key=lambda e: e.__getitem__('rate'), reverse=True)
+        for i in plantNeedData[0:4]:
+            sql_str += '"' + i['position'] + '",'
+            citylist.append(i['position'])
+        sql_geo = 'select areaName,center FROM t_area where areaName in (' + sql_str[:-1] + ')'  # 获取相应城市的坐标
+        cursor.execute(sql_geo)
+        results_geo = cursor.fetchall()
+        backData = PlantRd.getFlyOption(results2, results_geo, citylist, keyword, plantNeedData)#获取配置主方法
+        return jsonify(elements=backData)
+    except:
+        errMessage = {
+            "code": "1009",
+            "message": "服务器忙，暂时无法更新推荐内容"
+        }
+        return jsonify(elements=errMessage)
 
 #二、页面路由
 #首页-资讯页
@@ -224,6 +262,12 @@ def Drugclass():
 @app.route('/dist')
 def Drugdist():
     return render_template('dist.html')
+
+#种植推荐页
+@app.route('/plant')
+def plant():
+    return render_template('plant.html')
+
 
 #登录页
 @app.route('/login')

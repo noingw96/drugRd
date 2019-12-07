@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>药材推荐系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
+    <link rel="stylesheet" href="../static/css/dist.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/css/app.css" />
+    <style>
+        @media screen and(min-width:1200px){
+            .container {
+                width: 100% !important;
+            }
+        }
+        a{
+            color:#fff;
+        }
+        .search{
+            width: 100px;
+            height: 34px;
+            background: #41507d;
+            border-radius: 30px;
+            border: none;
+            margin: 0 auto;
+        }
+        input{
+            color: #000;
+            margin-left: 10px;
+            border-radius: 20px;
+            text-indent: 0.7em;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<!-- 顶部开始 -->
+<div class="header"></div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<div class="wrapper">
+
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="content">
+            <!-- 右侧内容框架，更改从这里开始 -->
+            <div class="search-block">
+                <label for="drugname">药材名称</label>
+                <input type="text" id="drugname">
+                <button class="search">搜索</button>
+            </div>
+            <div class="main">
+                <div class="wrapper2">
+                    <div class="container-fluid">
+                        <div class="row fill-h">
+                            <div class="col-lg-6 fill-h">
+                                <div class="xpanel-wrapper xpanel-wrapper-1">
+                                    <div class="xpanel">
+                                        <!-- 地图飞线 -->
+                                        <div class="fill-h" id="flyMap"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 fill-h">
+                                <div class="xpanel-wrapper xpanel-wrapper-1">
+                                    <div class="xpanel">
+                                        <!-- 地图散点 -->
+                                        <div class="fill-h" id="scatterMap"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 右侧内容框架，更改从这里结束 -->
+        </div>
+    </div>
+    <!-- 右侧主体结束 -->
+</div>
+<!-- 中部结束 -->
+<!-- 底部开始 -->
+<div class="footer">
+
+</div>
+
+<!-- 底部结束 -->
+<!-- 背景切换开始 -->
+<div class="bg-changer"></div>
+<!-- 背景切换结束 -->
+<script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+<script>
+    //引入公共部分
+//    $(".left-nav").load("inc/leftMenu");
+    $(".header").load("inc/header");
+    $(".bg-changer").load("inc/bgChange");
+</script>
+<script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
+<script src="../static/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../static/js/xadmin.js"></script>
+<script type="text/javascript" src="../static/js/plantjs/echarts-3.8.5.min.js"></script>
+<script type="text/javascript" src="../static/js/plantjs/echarts-map-world.js"></script>
+<script type="text/javascript" src="../static/js/plantjs/echarts-map-china.js"></script>
+<script type="text/javascript" src="../static/js/plantjs/echarts-china-provinces/jiangsu.js"></script>
+<script type="text/javascript" src="../static/js/plantjs/echarts-china-cities/jiang1_su1_su1_zhou1.js"></script>
+<script type="text/javascript" src="../static/js/plantjs/echarts-china-counties/jiang1su1_su1zhou1_kun1shan1shi4.js"></script>
+<script type="text/javascript">
+    $(function() {
+        /******************* 地图飞线 ******************/
+            //初始化echarts实例
+        const flyMap = echarts.init(document.getElementById("flyMap"));
+        //城市经纬度
+        const originName = '西安';
+        const flyGeo = {
+//            '洛阳': [112.460299, 34.62677],
+//            '西安': [108.946466, 34.347269],
+//            '兰州': [103.84044, 36.067321],
+//            '乌鲁木齐': [87.62444, 43.830763],
+//            '包头': [109.846544, 40.662929],
+//            '西宁': [101.78443, 36.623393],
+//            '银川': [106.258602, 38.487834],
+//            '成都': [104.081534, 30.655822],
+//            '重庆': [106.558434, 29.568996],
+//            '拉萨': [91.120789, 29.65005],
+//            '昆明': [102.852448, 24.873998],
+//            '贵阳': [106.636577, 26.653325],
+//            '太原': [112.534919, 37.873219],
+//            '武汉': [114.311582, 30.598467],
+//            '长沙': [112.945473, 28.234889],
+//            '南昌': [115.864589, 28.689455],
+//            '合肥': [117.233443, 31.826578],
+//            '杭州': [120.215503, 30.253087],
+//            '广州': [113.271431, 23.135336],
+//            '北京': [116.413384, 39.910925],
+//            '天津': [117.209523, 39.093668]
+        };
+        //飞线数据
+        var flyVal = [
+//            [{name: '洛阳'}, {name: '洛阳', value: 100}],
+//            [{name: '洛阳'}, {name: '西安', value: 35}],
+//            [{name: '洛阳'}, {name: '兰州', value: 25}],
+//            [{name: '洛阳'}, {name: '乌鲁木齐', value: 55}],
+//            [{name: '杭州'}, {name: '西安', value: 55}],
+//            [{name: '杭州'}, {name: '乌鲁木齐', value: 55}],
+//            [{name: '杭州'}, {name: '兰州', value: 55}],
+//            [{name: '杭州'}, {name: '杭州', value: 55}],
+            // [{name: '洛阳'}, {name: '包头', value: 60}],
+            // [{name: '洛阳'}, {name: '西宁', value: 45}],
+            // [{name: '洛阳'}, {name: '银川', value: 35}],
+            // [{name: '洛阳'}, {name: '成都', value: 35}],
+            // [{name: '洛阳'}, {name: '重庆', value: 40}],
+            // [{name: '洛阳'}, {name: '拉萨', value: 45}],
+            // [{name: '洛阳'}, {name: '昆明', value: 50}],
+            // [{name: '洛阳'}, {name: '贵阳', value: 55}],
+            // [{name: '洛阳'}, {name: '太原', value: 60}],
+            // [{name: '洛阳'}, {name: '武汉', value: 65}],
+            // [{name: '洛阳'}, {name: '长沙', value: 70}],
+            // [{name: '洛阳'}, {name: '南昌', value: 75}],
+            // [{name: '洛阳'}, {name: '合肥', value: 80}],
+            // [{name: '洛阳'}, {name: '杭州', value: 85}],
+            // [{name: '洛阳'}, {name: '广州', value: 90}],
+            // [{name: '洛阳'}, {name: '北京', value: 95}],
+            // [{name: '洛阳'}, {name: '天津', value: 60}],
+        ];
+        //数据转换，转换后格式：[{fromName:'cityName', toName:'cityName', coords:[[lng, lat], [lng, lat]]}, {...}]
+        const convertFlyData = function(data) {
+            var res = [];
+            for(var i=0;i<data.length;i++) {
+                var dataItem = data[i];
+                var toCoord = flyGeo[dataItem[0].name];
+                var fromCoord = flyGeo[dataItem[1].name];
+                if(fromCoord && toCoord) {
+                    res.push({
+                        fromName: dataItem[1].name,
+                        toName: dataItem[0].name,
+                        coords: [fromCoord, toCoord]
+                    });
+                }
+            }
+            return res;
+        };
+        //报表配置
+        const flySeries = [];
+        [[originName, flyVal]].forEach(function(item, i) {
+            flySeries.push({
+                name: item[0],
+                type: 'lines',
+                zlevel: 1,
+                symbol: ['none', 'none'],
+                symbolSize: 0,
+                effect: { //特效线配置
+                    show: true,
+                    period: 5, //特效动画时间，单位s
+                    trailLength: 0.1, //特效尾迹的长度，从0到1
+                    symbol: 'arrow',
+                    symbolSize: 5
+                },
+                lineStyle: {
+                    normal: {
+                        color: '#f19000',
+                        width: 1,
+                        opacity: 0.6,
+                        curveness: 0.2 //线的平滑度
+                    }
+                },
+                data: convertFlyData(item[1])
+            }, {
+                name: item[0],
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                rippleEffect: { //涟漪特效
+                    period: 5, //特效动画时长
+                    scale: 4, //波纹的最大缩放比例
+                    brushType: 'stroke' //波纹的绘制方式：stroke | fill
+                },
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                symbol: 'circle',
+                symbolSize: function (val) {
+                    //根据某项数据值设置符号大小
+                    return val[2] / 10;
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#f19000'
+                    }
+                },
+                data: item[1].map(function(dataItem) {
+                    return {
+                        name: dataItem[1].name,
+                        value: flyGeo[dataItem[1].name].concat([dataItem[1].value])
+                    };
+                })
+            }, { //与上层的点叠加
+                name: item[0],
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                zlevel: 3,
+                symbol: 'circle',
+                symbolSize: function (val) {
+                    //根据某项数据值设置符号大小
+                    return val[2] / 15;
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#f00'
+                    }
+                },
+                data: item[1].map(function(dataItem) {
+                    return {
+                        name: dataItem[1].name,
+                        value: flyGeo[dataItem[1].name].concat([dataItem[1].value])
+                    };
+                })
+            });
+        });
+
+        //报表配置项
+        const flyMapOpt = {
+            title: {
+                show: false,
+                text: '地图飞线',
+                x: 'center',
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    if(params.value) {
+                        return params.name + ' : ' + params.value[2];
+                    }else {
+                        return params.name;
+                    }
+                }
+            },
+            geo: {
+                map: 'china',
+                roam: false, //开启鼠标缩放和漫游
+                zoom: 1, //地图缩放级别
+                selectedMode: false, //选中模式：single | multiple
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                layoutCenter: ['50%', '50%'], //设置后left/right/top/bottom等属性无效
+                layoutSize: '100%', //保持地图宽高比
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: '#101f32',
+                        borderWidth: 1.1,
+                        borderColor: '#43d0d6'
+                    },
+                    emphasis: {
+                        areaColor: '#069'
+                    }
+                }
+            },
+            series: flySeries
+        };
+        //渲染报表
+        flyMap.setOption(flyMapOpt);
+        $(".search").on('click',function(){
+            var data ={
+                "drugname":$("#drugname").val()
+            }
+            $.ajax({
+                type:'get',
+                url:'/getFlyOption',
+                data:data,
+                headers:{"Content-Type":"application/json"},
+                dataType:'json',
+                success:function(ret){
+                    console.log(ret)
+                }
+            })
+        })
+
+        /********** 浏览器窗口改变时，重置报表大小 ****************/
+        window.onresize = function() {
+            flyMap.resize();
+            scatterMap.resize();
+            worldMap.resize();
+            provinceMap.resize();
+            cityMap.resize();
+            countyMap.resize();
+        }
+    });
+</script>
+</body>
+</html>
