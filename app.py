@@ -228,13 +228,13 @@ def getFlyOption():
         citylist = []
         for i in results:
             plantData.append({
-                "position": i[2],
-                "rate": i[3]
+                "name": i[2],
+                "value": i[3]
             })
-        plantNeedData = sorted(plantData, key=lambda e: e.__getitem__('rate'), reverse=True)
+        plantNeedData = sorted(plantData, key=lambda e: e.__getitem__('value'), reverse=True)
         for i in plantNeedData[0:4]:
-            sql_str += '"' + i['position'] + '",'
-            citylist.append(i['position'])
+            sql_str += '"' + i['name'] + '",'
+            citylist.append(i['name'])
         sql_geo = 'select areaName,center FROM t_area where areaName in (' + sql_str[:-1] + ')'  # 获取相应城市的坐标
         cursor.execute(sql_geo)
         results_geo = cursor.fetchall()

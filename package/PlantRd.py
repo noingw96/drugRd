@@ -35,7 +35,8 @@ def getFlyOption(results2,results_geo,citylist,keyword,plantNeedData):
         try:
             flyVal.append([
                 {'name': market},
-                marketData[market]
+                {'name': market, 'value': 100}
+                # marketData[market]
             ])
         except:
             err=8000
@@ -44,7 +45,7 @@ def getFlyOption(results2,results_geo,citylist,keyword,plantNeedData):
             for city in citylist:
                 flyVal.append([
                     {'name': market},
-                    {'name': city, 'value': 100}
+                    {'name': city, 'value': 40}
                 ])
         except:
             err=8000
