@@ -214,13 +214,18 @@ def updateInfo():
 #获取种植推荐页可视化配置
 @app.route('/getFlyOption', methods=['POST', 'GET'])
 def getFlyOption():
-    keyword = request.args.get("drugname")
+    arguments = {
+        'keyword':request.args.get("drugname"),
+        'position':request.args.get("position"),
+        'number':request.args.get("number"),
+        'trans':request.args.get("trans"),
+    }
     try:
         cursor = db.cursor()
-        sql = 'select * from drugposition where name ="' + keyword + '"'  # 获取药材种植区域
+        sql = 'select * from drugposition where name ="' + arguments['keyword'] + '"'  # 获取药材种植区域
         cursor.execute(sql)
         results = cursor.fetchall()
-        sql2 = 'select * from money where drugName ="' + keyword + '"'  # 获取药材市场价格
+        sql2 = 'select * from money where drugName ="' +  arguments['keyword'] + '"'  # 获取药材市场价格
         cursor.execute(sql2)
         results2 = cursor.fetchall()
         plantData = []
@@ -238,12 +243,30 @@ def getFlyOption():
         sql_geo = 'select areaName,center FROM t_area where areaName in (' + sql_str[:-1] + ')'  # 获取相应城市的坐标
         cursor.execute(sql_geo)
         results_geo = cursor.fetchall()
-        backData = PlantRd.getFlyOption(results2, results_geo, citylist, keyword, plantNeedData)#获取配置主方法
+        backData = PlantRd.getFlyOption(results2, results_geo, citylist, arguments, plantNeedData)#获取配置主方法
         return jsonify(elements=backData)
     except:
         errMessage = {
             "code": "1009",
             "message": "服务器忙，暂时无法更新推荐内容"
+        }
+        return jsonify(elements=errMessage)
+
+# 请求药材资讯的推荐内容
+@app.route('/DrugSim', methods=['POST', 'GET'])
+def DrugSim():
+    request_data = request.args.get("drugname")
+    try:
+        cursor = db.cursor()
+        sql = 'select * FROM erwei'
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        myresult = SimRd.search(results, request_data)  # 比较矩阵中相似度，返回前10个结果
+        return jsonify(myresult)
+    except:
+        errMessage = {
+            "errCode": "1010",
+            "Message": "暂无此数据"
         }
         return jsonify(elements=errMessage)
 

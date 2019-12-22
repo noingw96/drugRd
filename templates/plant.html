@@ -68,6 +68,22 @@
             top: 0;
             width: 50%;
         }
+        .span-select{
+            color:#000;
+        }
+        option{
+            color: #000;
+        }
+        .myposition,.shuliang,.trans{
+            margin-left: 20px;
+        }
+        #shuliang,#trans{
+            width: 130px;
+        }
+        .province,.city,.town{
+            padding: 0 0 6px 13px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -84,6 +100,25 @@
             <div class="search-block">
                 <label for="drugname">药材名称</label>
                 <input type="text" id="drugname">
+                <label class="myposition">所在地区</label>
+                <span class="span-select margin-left1">
+                     <select name="province" id="province" class="province">
+                     </select>
+                </span>
+                <span class="span-select">
+                     <select name="city" id="city" class="city">
+                             <option value="-2">所有市</option>
+                     </select>
+                </span>
+                <span class="span-select">
+                     <select name="town" id="town" class="town">
+                             <option value="-2">所有县</option>
+                     </select>
+                </span>
+                <label class="shuliang">供应数量</label>
+                <input type="text" id="shuliang">
+                <label class="trans">运输价格/100公里</label>
+                <input type="text" id="trans">
                 <button class="search">搜索</button>
             </div>
             <div class="main">
@@ -158,6 +193,7 @@
 <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
 <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../static/js/xadmin.js"></script>
+<script type="text/javascript" src="../static/js/city/city.js"></script>
 <script type="text/javascript" src="../static/js/plantjs/echarts-3.8.5.min.js"></script>
 <script type="text/javascript" src="../static/js/plantjs/echarts-map-world.js"></script>
 <script type="text/javascript" src="../static/js/plantjs/echarts-map-china.js"></script>
@@ -376,9 +412,31 @@
 //        renderPie();
         $(".search").on('click',function(){
             var keyword = $("#drugname").val();
-            var data ={
-                "drugname":keyword
+            var province = $("#province").val();
+            var number = $("#shuliang").val()||"1000";
+            var trans = $("#trans").val()||"500";
+            var city = $("#city").val();
+            var town = $("#toen").val();
+            console.log(number,trans);
+            if(keyword==""){
+                alert("请输入药材名称");
+                return;
             }
+            if(!/^\d+$/.test(number)){
+                alert("供应数量：请输入整数！");
+                return;
+            }
+            if(!/^\d+$/.test(trans)){
+                alert("运输价格：请输入整数！");
+                return;
+            }
+            var data ={
+                "drugname":keyword,
+                "position":province+'#'+city+"#"+town,
+                "number":parseInt(number),
+                "trans":parseInt(trans),
+            }
+
             $.ajax({
                 type:'get',
                 url:'/getFlyOption',
@@ -413,6 +471,21 @@
                     $(".plant-p").show();
                 }
             })
+            $.ajax({
+                type:'get',
+                url:'/DrugSim',
+                data:data,
+                headers:{"Content-Type":"application/json"},
+                dataType:'json',
+                success:function(ret){
+                    var druglist=ret;
+                    var drug_li="";
+                    $.each(druglist.slice(1,6),function (index,item) {
+                        drug_li+="<li>"+item.name+"</li>";
+                    })
+                    $("#plantList2").html(drug_li);
+                }
+            })
         })
 
         /********** 浏览器窗口改变时，重置报表大小 ****************/
@@ -424,6 +497,57 @@
             cityMap.resize();
             countyMap.resize();
         }
+        var provinceList=[];
+        var cityList=[];
+        var townList=[];
+        function provinceInit(){
+            var optionProvince = '<option value="-1">所有省份</option>'
+            $.each(zNodes,function (i,val) {
+                if(val["pId"]=="-1"){
+                    provinceList.push(val);
+                    optionProvince+='<option value="'+val.name+'">'+val.name+'</option>'
+                }else if(val["grade"]=="2"){
+                    cityList.push(val);
+                }else if(val["grade"]=="3"){
+                    townList.push(val);
+                }
+            })
+//        console.log(provinceList);
+            $("#province").append(optionProvince);
+            $("#province").change(function () {
+                var province_id = '';
+                var val = $(this).val();
+                for(var i=0; i<provinceList.length; i++) {
+                    if(val === provinceList[i].name) {
+                        province_id = provinceList[i].id;
+                    }
+                }
+                var optionCity ='<option value="-2">所有市</option>';
+                $.each(cityList,function (i,val) {
+                    if(val.pId == province_id){
+                        optionCity+='<option value="'+val.name+'">'+val.name+'</option>';
+                    }
+                })
+                $("#city").html(optionCity);
+            })
+            $("#city").change(function () {
+                var city_id = '';
+                var val = $(this).val();
+                for(var i=0; i<cityList.length; i++) {
+                    if(val === cityList[i].name) {
+                        city_id = cityList[i].id;
+                    }
+                }
+                var optionTown ='<option value="-2">所有市</option>';
+                $.each(townList,function (i,val) {
+                    if(val.pId == city_id){
+                        optionTown+='<option value="'+val.name+'">'+val.name+'</option>';
+                    }
+                })
+                $("#town").html(optionTown);
+            })
+        }
+        provinceInit();
     });
 </script>
 </body>

@@ -10,7 +10,8 @@ db = MySQLdb.connect("127.0.0.1", "root", "root", "bishe", charset='utf8')
 if __name__=='__main__':
     start = time.clock()
     cursor = db.cursor()
-    keyword = "灵芝孢子粉"
+    # keyword = "灵芝孢子粉"
+    keyword = "人参"
     sql = 'select * from drugposition where name ="'+keyword+'"'#获取药材种植区域
     cursor.execute(sql)
     results = cursor.fetchall()
@@ -32,10 +33,27 @@ if __name__=='__main__':
     sql_geo = 'select areaName,center FROM t_area where areaName in ('+sql_str[:-1]+')' #获取相应城市的坐标
     cursor.execute(sql_geo)
     results_geo = cursor.fetchall()
+    arguments = {
+        'keyword': "人参",
+        'position': "",
+        'number':2000,
+        'trans': 500,
+    }
+    backData = PlantRd.getFlyOption(results2,results_geo,citylist,arguments,plantNeedData)
 
-    backData = PlantRd.getFlyOption(results2,results_geo,citylist,keyword,plantNeedData)
-    print(backData)
 
+    # flyGeo = {
+    #     '荷花池': [104.084339, 30.697028],
+    #     '玉林': [110.190178, 22.658497],
+    #     '亳州': [115.763194, 33.842247],
+    #     '安国': [115.275916, 38.465295]
+    # }
+    # print(flyGeo)
+    # a=flyGeo
+    # print(a)
+    # a['荷花池']=1
+    # print(a)
+    # print(flyGeo)
 
 
 
