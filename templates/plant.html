@@ -139,10 +139,13 @@
             margin:0 100px;
         }
         .ul_title .danjia_text{
-            margin-top: 50px;
+            margin-top:50px;
         }
         .danjia_name{
             font-weight:800;
+            color: #12ff24
+        }
+        .lirun p:first-child{
             color: #12ff24
         }
     </style>
@@ -205,9 +208,9 @@
                                             </ul>
                                             <ul class="ul_result">
                                                 <li style="display: block"></li>
-                                                <li>2</li>
-                                                <li>3</li>
-                                                <li>4</li>
+                                                <li></li>
+                                                <li></li>
+                                                <li class="lirun"></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -516,7 +519,7 @@
                 },
                 xAxis: {
                     type: 'value',
-                    name: 'Days',
+                    name: 'km',
                     axisLabel: {
                         formatter: '{value}'
                     }
@@ -595,6 +598,7 @@
                     column_position = ret.elements.columnConfig.column_position;
                     column_market = ret.elements.columnConfig.column_market;
                     column_data = ret.elements.columnConfig.column_data;
+                    column_data_obj=[];
                     for(var i=0;i<column_data.length;i++){
                         column_data_obj.push({
                             name: column_position[i],
@@ -637,6 +641,24 @@
                     var max_danjia = ret.elements.max_danjia;
                     li_3 += '<p class="danjia_text">根据最高单价为你推荐供应药材市场：<span class="danjia_name">'+max_danjia.market+'</span></p><p class="max_danjia">价格为<span>￥'+max_danjia.price+'/'+max_danjia.guige+'</span></p>'
                     $(".ul_result li").eq(2).html(li_3);
+                    //li_4
+                    var li_4_data = PMD.sort(function (v1,v2) {
+                        return v2.lirun-v1.lirun;
+                    })
+                    for(var i=0;i<li_4_data.length;i++){
+                        if(li_4_data[i].lirun<=0||i==4){
+                            break;
+                        }else {
+                            li_4 += '<p><span class="p_start">'+li_4_data[i].start+'</span>------<span class="p_end">'+li_4_data[i].end+'</span><span class="dist">￥'+Math.ceil(li_4_data[i].lirun)+'</span></p>';
+                        }
+                    }
+                    console.log(li_4);
+                    if(li_4.length<=0){
+                        $(".ul_result li").eq(3).html('<p>抱歉，您的供应数量太少或运输成本过高，您无法获得利润</p>');
+                    }else {
+                        $(".ul_result li").eq(3).html(li_4);
+                    }
+
                 }
             })
 
