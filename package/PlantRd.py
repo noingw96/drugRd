@@ -1,5 +1,6 @@
 # -*- encoding:utf-8 -*-
 from math import radians, cos, sin, asin, sqrt
+import math
 #获取飞行配置函数接受如下参数
 # 1 药材在市场上价格
 # 2 种植地区经纬度
@@ -21,7 +22,9 @@ def getFlyOption(results2,results_geo,citylist,arguments,plantNeedData):
     marketGeo = getMarketGeo(flyGeo,results2)#获取药材市场经纬度
     plantGeo = getPlantGeo(results_geo)#获取种植区域经纬度
     PMdistance = getPMD(marketGeo,plantGeo)
-    PMPrice = getPMP(PMdistance,arguments,results2)
+    columnConfig = getColumnConfig(PMdistance,results2,citylist)
+    max_danjia = getDanjia(results2)
+    PMdistance = getPMP(PMdistance,arguments,results2)
     print(results2)
     for i in results2:
         marketlist.append(i[1])
@@ -61,7 +64,10 @@ def getFlyOption(results2,results_geo,citylist,arguments,plantNeedData):
         "plantData": plantNeedData[0:4],
         "flyVal": flyVal,
         "flyGeo": flyGeo,
-        "PMD":PMdistance
+        "PMD":PMdistance,
+        "guige":results2[0][2],
+        "columnConfig":columnConfig,
+        "max_danjia":max_danjia
     }
     return backData
 
@@ -129,9 +135,42 @@ def getPMP(PMdistance,arguments,marketPrice):
     trans = arguments['trans']
     lirunList = []
     for i in range(len(PMdistance)):
-        lirun = float(PMdistance[i]['price'])*number - float(PMdistance[i]['distance'])*trans
+        lirun = float(PMdistance[i]['price'])*float(number) - float(PMdistance[i]['distance'])*float(trans)
         PMdistance[i]['lirun'] = lirun
-    for i in PMdistance:
+    a = sorted(PMdistance, key=lambda e: e.__getitem__('lirun'), reverse=True)
+    return a
+
+#距离表的配置信息
+def getColumnConfig(PMdistance,result,citylist):
+    column_market = []
+    column_position=citylist
+    column_data=[]
+    cur_position = ""
+    for row in result:
+        column_market.append(row[1])
+    for row in column_position:
+        cur_list = []
+        for row2 in PMdistance:
+            if row2['start'] == row:
+                cur_list.append(math.ceil(row2['distance']))
+        column_data.append(cur_list)
+    columnConfig = {
+        "column_market":column_market,
+        "column_position":column_position,
+        "column_data":column_data,
+    }
+    for i in column_data:
         print(i)
+    return columnConfig
 
-
+def getDanjia(results2):
+    max=0
+    Danjia = {}
+    for row in results2:
+        if float(row[3])>max:
+            Danjia ={
+                'market':row[1],
+                'guige':row[2].split(' ')[0],
+                'price':row[3]
+            }
+    return Danjia

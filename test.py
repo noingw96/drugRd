@@ -11,7 +11,7 @@ if __name__=='__main__':
     start = time.clock()
     cursor = db.cursor()
     # keyword = "灵芝孢子粉"
-    keyword = "人参"
+    keyword = "白芍"
     sql = 'select * from drugposition where name ="'+keyword+'"'#获取药材种植区域
     cursor.execute(sql)
     results = cursor.fetchall()
@@ -34,7 +34,7 @@ if __name__=='__main__':
     cursor.execute(sql_geo)
     results_geo = cursor.fetchall()
     arguments = {
-        'keyword': "人参",
+        'keyword': keyword,
         'position': "",
         'number':2000,
         'trans': 500,

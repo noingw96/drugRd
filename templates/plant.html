@@ -59,6 +59,13 @@
             top: 0;
             right: 0;
         }
+        #columnChart{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            top: 0;
+            right: 0;
+        }
         .fill-h {
             position: relative;
         }
@@ -83,6 +90,60 @@
         .province,.city,.town{
             padding: 0 0 6px 13px;
             border-radius: 10px;
+        }
+        .text1{
+            color: #54fc09;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+        }
+        span#rd_p {
+            margin-left: 10px;
+            color: red;
+            font-size: 20px;
+        }
+        span#rd_m {
+            margin-left: 10px;
+            color: blue;
+            font-size: 20px;
+        }
+        .ul_result li{
+            display: none;
+        }
+        .ul_title li{
+            font-size: 16px;
+            color: #f2f2f2;
+            font-weight: 800;
+            border-right: 1px solid;
+            text-align: center;
+            cursor: pointer;
+        }
+        .ul_title .active{
+            color: red;
+        }
+        .ul_title li:last-child{
+            border-right: none;
+        }
+        .ul_result p{
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .ul_title{
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            display: grid;
+        }
+        .dist{
+            float: right;
+            margin:0 100px;
+        }
+        .ul_title .danjia_text{
+            margin-top: 50px;
+        }
+        .danjia_name{
+            font-weight:800;
+            color: #12ff24
         }
     </style>
 </head>
@@ -116,9 +177,9 @@
                      </select>
                 </span>
                 <label class="shuliang">供应数量</label>
-                <input type="text" id="shuliang">
+                <input type="text" id="shuliang" placeholder="默认1000">
                 <label class="trans">运输价格/100公里</label>
-                <input type="text" id="trans">
+                <input type="text" id="trans" placeholder="默认500">
                 <button class="search">搜索</button>
             </div>
             <div class="main">
@@ -132,7 +193,27 @@
                                         <div class="fill-h" id="flyMap"></div>
                                     </div>
                                 </div>
+                                <div class="xpanel-wrapper xpanel-wrapper-2">
+                                    <div class="xpanel">
+                                        <!-- 地图散点 -->
+                                        <div class="fill-h" id="scatterMap2">
+                                            <ul class="ul_title">
+                                                <li class="active">距市场最近</li>
+                                                <li>距您最近</li>
+                                                <li>单价最高</li>
+                                                <li>收益最高</li>
+                                            </ul>
+                                            <ul class="ul_result">
+                                                <li style="display: block"></li>
+                                                <li>2</li>
+                                                <li>3</li>
+                                                <li>4</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="col-lg-6 fill-h">
                                 <div class="xpanel-wrapper xpanel-wrapper-2">
                                     <div class="xpanel">
@@ -150,16 +231,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="xpanel-wrapper xpanel-wrapper-3">
+                                <div class="xpanel-wrapper xpanel-wrapper-1">
                                     <div class="xpanel">
                                         <!-- 地图散点 -->
-                                        <div class="fill-h" id="scatterMap2"></div>
-                                    </div>
-                                </div>
-                                <div class="xpanel-wrapper xpanel-wrapper-3">
-                                    <div class="xpanel">
-                                        <!-- 地图散点 -->
-                                        <div class="fill-h" id="scatterMap3"></div>
+                                        <div class="fill-h" id="scatterMap3">
+                                            <div id="columnChart"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +267,7 @@
     $(".header").load("inc/header");
     $(".bg-changer").load("inc/bgChange");
 </script>
-<script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>-->
 <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../static/js/xadmin.js"></script>
 <script type="text/javascript" src="../static/js/city/city.js"></script>
@@ -206,6 +283,7 @@
             //初始化echarts实例
         const flyMap = echarts.init(document.getElementById("flyMap"));
         const pieChart = echarts.init(document.getElementById("pieChart"));
+        const columnChart = echarts.init(document.getElementById("columnChart"));
         //城市经纬度
         const originName = '西安';
         var flyGeo = {
@@ -239,6 +317,17 @@
             }
             return res;
         };
+        //柱状图数据
+        var column_market = ['荷花池','玉林','亳州','安国'];
+        var column_position = ['广州', '河北', '南京',"厦门"];
+        var column_data = [
+                [1264.089, 1230.839, 276.424, 771.415],
+                [1257.621, 1759.433, 479.493, 80.643],
+                [1367.076, 1690.808, 334.608, 251.834],
+                [5.156, 1076.092, 1154.167, 1342.337],
+        ]
+        var column_data_obj =[];
+
         //报表配置
         function renderFly() {
             const flySeries = [];
@@ -408,8 +497,43 @@
 
             pieChart.setOption(option);
         }
+        function renderColumn() {
+            var option = {
+                title: {
+                    text: '适宜种植地-市场距离'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: column_position
+                },
+                grid: {
+                    left: 100
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Days',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    inverse: true,
+                    data: column_market
+                },
+                series: column_data_obj
+            };
+            columnChart.setOption(option);
+        }
+
         renderFly();
 //        renderPie();
+//        renderColumn();
         $(".search").on('click',function(){
             var keyword = $("#drugname").val();
             var province = $("#province").val();
@@ -466,28 +590,64 @@
                     }
                     $(".plant-span").text(keyword);
                     $("#plantList1").html(li_1);
+
+                    //距离图
+                    column_position = ret.elements.columnConfig.column_position;
+                    column_market = ret.elements.columnConfig.column_market;
+                    column_data = ret.elements.columnConfig.column_data;
+                    for(var i=0;i<column_data.length;i++){
+                        column_data_obj.push({
+                            name: column_position[i],
+                            type: 'bar',
+                            data: column_data[i],
+                        })
+                    }
                     renderFly();
                     renderPie();
+                    renderColumn();
                     $(".plant-p").show();
-                }
-            })
-            $.ajax({
-                type:'get',
-                url:'/DrugSim',
-                data:data,
-                headers:{"Content-Type":"application/json"},
-                dataType:'json',
-                success:function(ret){
-                    var druglist=ret;
-                    var drug_li="";
-                    $.each(druglist.slice(1,6),function (index,item) {
-                        drug_li+="<li>"+item.name+"</li>";
+                    $.ajax({
+                        type:'get',
+                        url:'/DrugSim',
+                        data:data,
+                        headers:{"Content-Type":"application/json"},
+                        dataType:'json',
+                        success:function(ret){
+                            var druglist=ret;
+                            var drug_li="";
+                            $.each(druglist.slice(1,8),function (index,item) {
+                                drug_li+="<li>"+item.name+"</li>";
+                            })
+                            $("#plantList2").html(drug_li);
+                        }
                     })
-                    $("#plantList2").html(drug_li);
+
+                    //获取选择菜单栏内容
+                    var li_1='',li_2='',li_3='',li_4='';
+                    var PMD = ret.elements.PMD;
+                    //li_1
+                    var li_1_data = PMD.sort(function (v1,v2) {
+                        return v1.distance-v2.distance;
+                    })
+                    li_1_data.slice(0,4).forEach(function (val) {
+                        li_1 += '<p><span class="p_start">'+val.start+'</span>------<span class="p_end">'+val.end+'</span><span class="dist">'+Math.ceil(val.distance)+'km</span></p>';
+                    })
+                    $(".ul_result li").eq(0).html(li_1);
+                    //li_3
+                    var max_danjia = ret.elements.max_danjia;
+                    li_3 += '<p class="danjia_text">根据最高单价为你推荐供应药材市场：<span class="danjia_name">'+max_danjia.market+'</span></p><p class="max_danjia">价格为<span>￥'+max_danjia.price+'/'+max_danjia.guige+'</span></p>'
+                    $(".ul_result li").eq(2).html(li_3);
                 }
             })
+
         })
 
+        $(".ul_title").on('click','li',function (e) {
+            var index = $(this).index()
+            $(".ul_title li").eq(index).addClass('active').siblings().removeClass('active');
+            $(".ul_result li").eq(index).show().siblings().hide();
+        })
+        
         /********** 浏览器窗口改变时，重置报表大小 ****************/
         window.onresize = function() {
             flyMap.resize();

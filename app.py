@@ -220,39 +220,40 @@ def getFlyOption():
         'number':request.args.get("number"),
         'trans':request.args.get("trans"),
     }
-    try:
-        cursor = db.cursor()
-        sql = 'select * from drugposition where name ="' + arguments['keyword'] + '"'  # 获取药材种植区域
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        sql2 = 'select * from money where drugName ="' +  arguments['keyword'] + '"'  # 获取药材市场价格
-        cursor.execute(sql2)
-        results2 = cursor.fetchall()
-        plantData = []
-        sql_str = ''  # 查找省份待拼接字符串
-        citylist = []
-        for i in results:
-            plantData.append({
-                "name": i[2],
-                "value": i[3]
-            })
-        plantNeedData = sorted(plantData, key=lambda e: e.__getitem__('value'), reverse=True)
-        for i in plantNeedData[0:4]:
-            sql_str += '"' + i['name'] + '",'
-            citylist.append(i['name'])
-        sql_geo = 'select areaName,center FROM t_area where areaName in (' + sql_str[:-1] + ')'  # 获取相应城市的坐标
-        cursor.execute(sql_geo)
-        results_geo = cursor.fetchall()
-        backData = PlantRd.getFlyOption(results2, results_geo, citylist, arguments, plantNeedData)#获取配置主方法
-        return jsonify(elements=backData)
-    except:
-        errMessage = {
-            "code": "1009",
-            "message": "服务器忙，暂时无法更新推荐内容"
-        }
-        return jsonify(elements=errMessage)
+    cursor = db.cursor()
+    sql = 'select * from drugposition where name ="' + arguments['keyword'] + '"'  # 获取药材种植区域
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    sql2 = 'select * from money where drugName ="' + arguments['keyword'] + '"'  # 获取药材市场价格
+    cursor.execute(sql2)
+    results2 = cursor.fetchall()
+    plantData = []
+    sql_str = ''  # 查找省份待拼接字符串
+    citylist = []
+    for i in results:
+        plantData.append({
+            "name": i[2],
+            "value": i[3]
+        })
+    plantNeedData = sorted(plantData, key=lambda e: e.__getitem__('value'), reverse=True)
+    for i in plantNeedData[0:4]:
+        sql_str += '"' + i['name'] + '",'
+        citylist.append(i['name'])
+    sql_geo = 'select areaName,center FROM t_area where areaName in (' + sql_str[:-1] + ')'  # 获取相应城市的坐标
+    cursor.execute(sql_geo)
+    results_geo = cursor.fetchall()
+    backData = PlantRd.getFlyOption(results2, results_geo, citylist, arguments, plantNeedData)  # 获取配置主方法
+    return jsonify(elements=backData)
+    # try:
+    #
+    # except:
+    #     errMessage = {
+    #         "code": "1009",
+    #         "message": "服务器忙，暂时无法更新推荐内容"
+    #     }
+    #     return jsonify(elements=errMessage)
 
-# 请求药材资讯的推荐内容
+# 请求种植推荐页饼图列表2数据
 @app.route('/DrugSim', methods=['POST', 'GET'])
 def DrugSim():
     request_data = request.args.get("drugname")
