@@ -35,7 +35,7 @@ if __name__=='__main__':
     results_geo = cursor.fetchall()
     arguments = {
         'keyword': keyword,
-        'position': "",
+        'position': "河南省#沧州市#东城区",
         'number':2000,
         'trans': 500,
     }

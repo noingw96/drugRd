@@ -1,6 +1,7 @@
 # -*- encoding:utf-8 -*-
 from math import radians, cos, sin, asin, sqrt
 import math
+import MySQLdb
 #获取飞行配置函数接受如下参数
 # 1 药材在市场上价格
 # 2 种植地区经纬度
@@ -9,6 +10,7 @@ import math
 # 5 种植区域分布比例列表
 def getFlyOption(results2,results_geo,citylist,arguments,plantNeedData):
     keyword =arguments['keyword']
+    position =arguments['position']
     marketData = {}
     flyGeo = {
         '荷花池': [104.084339, 30.697028],
@@ -24,6 +26,7 @@ def getFlyOption(results2,results_geo,citylist,arguments,plantNeedData):
     PMdistance = getPMD(marketGeo,plantGeo)
     columnConfig = getColumnConfig(PMdistance,results2,citylist)
     max_danjia = getDanjia(results2)
+    my_distance = getMyDistance(position,plantGeo)
     PMdistance = getPMP(PMdistance,arguments,results2)
     print(results2)
     for i in results2:
@@ -67,7 +70,8 @@ def getFlyOption(results2,results_geo,citylist,arguments,plantNeedData):
         "PMD":PMdistance,
         "guige":results2[0][2],
         "columnConfig":columnConfig,
-        "max_danjia":max_danjia
+        "max_danjia":max_danjia,
+        'my_distance':my_distance
     }
     return backData
 
@@ -174,3 +178,25 @@ def getDanjia(results2):
                 'price':row[3]
             }
     return Danjia
+
+
+def getMyDistance(position,plantGeo):
+    town = position.split('#')[2]
+    if(town!='-2'):
+        db = MySQLdb.connect("127.0.0.1", "root", "root", "bishe", charset='utf8')
+        cursor = db.cursor()
+        sql = 'select center FROM t_area where areaName like "%' + town + '%"'
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        jing = results[0][0].split(",")[0]
+        wei = results[0][0].split(",")[1]
+        mydistance = []
+        for row in plantGeo:
+            dist = geodistance(jing, wei, row['geo'][0], row['geo'][1])
+            mydistance.append({
+                'end': row['name'],
+                'dist': dist
+            })
+        return mydistance
+    else:
+        return []

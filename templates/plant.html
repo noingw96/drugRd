@@ -543,7 +543,7 @@
             var number = $("#shuliang").val()||"1000";
             var trans = $("#trans").val()||"500";
             var city = $("#city").val();
-            var town = $("#toen").val();
+            var town = $("#town").val();
             console.log(number,trans);
             if(keyword==""){
                 alert("请输入药材名称");
@@ -563,7 +563,7 @@
                 "number":parseInt(number),
                 "trans":parseInt(trans),
             }
-
+            console.log(data)
             $.ajax({
                 type:'get',
                 url:'/getFlyOption',
@@ -637,6 +637,17 @@
                         li_1 += '<p><span class="p_start">'+val.start+'</span>------<span class="p_end">'+val.end+'</span><span class="dist">'+Math.ceil(val.distance)+'km</span></p>';
                     })
                     $(".ul_result li").eq(0).html(li_1);
+                    //li_2
+                    var mydistence=ret.elements.my_distance;
+                    var li_2_data = mydistence.sort(function (v1,v2) {
+                        return v1.dist-v2.dist;
+                    });
+                    if(li_2_data.length>0){
+                        li_2 += '<p class="danjia_text">根据您所在区域，为您推荐种植地区为：<span class="danjia_name">'+li_2_data[0].end+'</span></p><p class="max_danjia">距离为<span>'+li_2_data[0].dist+'km</span></p>';
+                    }else {
+                        li_2 +='<p>您还未输入您的位置</p>';
+                    }
+                    $(".ul_result li").eq(1).html(li_2);
                     //li_3
                     var max_danjia = ret.elements.max_danjia;
                     li_3 += '<p class="danjia_text">根据最高单价为你推荐供应药材市场：<span class="danjia_name">'+max_danjia.market+'</span></p><p class="max_danjia">价格为<span>￥'+max_danjia.price+'/'+max_danjia.guige+'</span></p>'
@@ -719,7 +730,7 @@
                         city_id = cityList[i].id;
                     }
                 }
-                var optionTown ='<option value="-2">所有市</option>';
+                var optionTown ='<option value="-2">所有县</option>';
                 $.each(townList,function (i,val) {
                     if(val.pId == city_id){
                         optionTown+='<option value="'+val.name+'">'+val.name+'</option>';
