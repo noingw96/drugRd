@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3dcfd8b9-b99e-452a-b199-40931c146931" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.py" afterPath="$PROJECT_DIR$/app.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package/PlantRd.py" afterPath="$PROJECT_DIR$/package/PlantRd.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/plant.html" afterPath="$PROJECT_DIR$/templates/plant.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
     </list>
     <ignored path="drugRd.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,11 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="244" column="58" selection-start-line="244" selection-start-column="58" selection-end-line="244" selection-end-column="58" />
+            <state relative-caret-position="133">
+              <caret line="229" column="36" selection-start-line="229" selection-start-column="36" selection-end-line="229" selection-end-column="36" />
               <folding>
                 <element signature="e#25#80#0" expanded="true" />
               </folding>
@@ -38,7 +34,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlantRd.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PlantRd.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package/PlantRd.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="33">
@@ -113,9 +109,9 @@
         <option value="$PROJECT_DIR$/templates/register.html" />
         <option value="$PROJECT_DIR$/static/js/city/test.js" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/package/PlantRd.py" />
         <option value="$PROJECT_DIR$/templates/plant.html" />
+        <option value="$PROJECT_DIR$/app.py" />
       </list>
     </option>
   </component>
@@ -823,16 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="244" column="58" selection-start-line="244" selection-start-column="58" selection-end-line="244" selection-end-column="58" />
-          <folding>
-            <element signature="e#25#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="454">
@@ -847,6 +833,16 @@
           <caret line="183" column="33" selection-start-line="183" selection-start-column="33" selection-end-line="183" selection-end-column="33" />
           <folding>
             <element signature="e#25#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="229" column="36" selection-start-line="229" selection-start-column="36" selection-end-line="229" selection-end-column="36" />
+          <folding>
+            <element signature="e#25#80#0" expanded="true" />
           </folding>
         </state>
       </provider>
