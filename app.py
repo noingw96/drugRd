@@ -1,7 +1,7 @@
 # -*- encoding:utf-8 -*-
 from flask import Flask,jsonify,render_template,request
 from py2neo import Graph
-from package import SimRd,GetInfor,ProvinceDict,PlantRd
+from package import SimRd,GetInfor,ProvinceDict,PlantRd,PositionRd
 import time
 import MySQLdb
 import json
@@ -10,6 +10,34 @@ app = Flask(__name__)
 db = MySQLdb.connect("127.0.0.1", "root", "root", "bishe", charset='utf8')
 
 #一、页面方法
+#请求药材地区的推荐内容
+@app.route('/positionRd',methods=['POST','GET'])
+def positionRd():
+    request_data = request.args.get("content")
+    try:
+        myresult = PositionRd.main(request_data)  # h获取相似地区
+        return jsonify(elements=myresult)
+    except:
+        errMessage ={
+            "errCode":"3002",
+            "Message":"暂无此数据"
+        }
+        return jsonify(elements=errMessage)
+
+#对比两个地区
+@app.route('/duubleRd', methods=['POST', 'GET'])
+def duubleRd():
+    p1 = request.args.get("p1")
+    p2 = request.args.get("p2")
+    try:
+        myresult = PositionRd.doublePosition(p1,p2)  # h获取相似地区
+        return jsonify(elements=myresult)
+    except:
+        errMessage = {
+            "errCode": "3003",
+            "Message": "暂无此数据"
+        }
+        return jsonify(elements=errMessage)
 #请求药材资讯的推荐内容
 @app.route('/inforRd',methods=['POST','GET'])
 def inforRd():
@@ -33,6 +61,24 @@ def inforRd():
         errMessage ={
             "errCode":"1001",
             "Message":"暂无此数据"
+        }
+        return jsonify(elements=errMessage)
+
+@app.route('/inforSearch', methods=['POST', 'GET'])
+def inforSearch():
+    request_data = request.args.get("content")
+    try:
+        cursor = db.cursor()
+        sql2 = 'select * FROM information where keyName like "%'+request_data+'%"'
+        cursor.execute(sql2)
+        inforListResult = cursor.fetchall()
+        inforList = []
+        inforList = GetInfor.getSearch(inforListResult)  # 获取推荐的资讯列表
+        return jsonify(elements=inforList)
+    except:
+        errMessage = {
+            "errCode": "3001",
+            "Message": "搜索无结果"
         }
         return jsonify(elements=errMessage)
 
@@ -291,6 +337,10 @@ def Drugdist():
 def plant():
     return render_template('plant.html')
 
+#地区推荐页
+@app.route('/position')
+def position():
+    return render_template('position.html')
 
 #登录页
 @app.route('/login')

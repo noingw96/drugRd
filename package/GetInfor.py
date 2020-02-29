@@ -25,3 +25,17 @@ def RandomInfor(inforList):
         randomList.append(popElement)
     return randomList
 
+def getSearch(informations):
+    all = []
+    for infor in informations:
+        cur = {
+            'key': infor[0],
+            'title': infor[1],
+            'intro': infor[2],
+            'author': infor[3],
+            'time': infor[4],
+            'url': infor[5]
+        }
+        all.append(cur)
+    return all[1:20]
+

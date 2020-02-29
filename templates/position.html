@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>药材推荐系统</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/css/font.css">
+	<link rel="stylesheet" href="../static/css/xadmin.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
+    <link rel="stylesheet" href="../static/lib/layui/css/layui.css">
+    <style>
+        .ul_title li{
+            font-size: 16px;
+            color: #f2f2f2;
+            font-weight: 800;
+            border-right: 1px solid;
+            text-align: center;
+            cursor: pointer;
+        }
+        .ul_title .active{
+            color: red;
+        }
+        .ul_title li:last-child{
+            border-right: none;
+        }
+        .ul_title{
+            margin: 0 auto;
+            width: 50%;
+            grid-template-columns: 1fr 1fr;
+            display: grid;
+        }
+        select{
+            color: #000;
+            line-height: 20px;
+            padding: 5px 0 10px 5px;
+            margin-right: 18px;
+        }
+        option{
+            color: #000;
+        }
+        .flex1{
+            display: flex;
+            height: 300px;
+            justify-content: center;
+            align-items: center;
+        }
+        .center{
+            text-align: center;
+            font-size: 20px;
+            line-height: 40px;
+            color: #054b43;
+            font-weight: 800;
+            display: none;
+        }
+        .progress{
+            display: none;
+            width: 400px;
+            height: 12px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 5px;
+        }
+        .progress_1{
+            width: 0%;
+            height: 13px;
+            background: #24c7ff;
+            border-radius: 10px;
+            transition:width 1s;
+        }
+        p.more {
+            color: red;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .layui-table {
+            text-align: center;
+            display: none;
+            bottom:5%;
+            right: 1%;
+            width: 40%;
+            margin: 10px 0;
+            background-color: rgba(255, 255, 255, 0.25);
+            position: absolute;
+        }
+        .layui-table th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部开始 -->
+    <div class="header">
+    </div>
+    <!-- 顶部结束 -->
+    <!-- 中部开始 -->
+    <div class="wrapper">
+        <!-- 左侧菜单开始 利用load引入inc中公共部分 -->
+        <!--<div class="left-nav"></div>-->
+        <!-- 左侧菜单结束 -->
+        <!-- 右侧主体开始 -->
+        <div class="page-content">
+          <div class="content">
+            <!-- 右侧内容框架，更改从这里开始 -->
+              <ul class="ul_title">
+                  <li class="active">地区对比</li>
+                  <li>地区推荐</li>
+              </ul>
+              <div class="flex1">
+                  <select name="city1" lay-verify="" id="city1">
+                  </select>
+                  <select name="city2" lay-verify="" id="city2">
+                  </select>
+                  <button type="button" class="layui-btn" id="search">地区对比</button>
+              </div>
+              <div class="progress">
+                  <div class="progress_1"></div>
+              </div>
+              <div class="center">
+                  <p>农户在<span class="c1"></span>地区与<span class="c2"></span>地区种植</p>
+                  <p class="p">
+                      <!--<span>人参</span>-->
+                      <!--<span>人参</span>-->
+                      <!--<span>人参</span>-->
+                  </p>
+                  <p>这几类药材情况相似</p>
+                  <p class="more">显示详情>></p>
+                  <table class="layui-table">
+                      <!--<colgroup>-->
+                          <!--<col width="150">-->
+                          <!--<col width="150">-->
+                          <!--<col>-->
+                      <!--</colgroup>-->
+                      <!--<thead class="thead">-->
+                      <!--<tr>-->
+                          <!--<th>名称</th>-->
+                          <!--<th>北京</th>-->
+                          <!--<th>上海</th>-->
+                      <!--</tr>-->
+                      <!--</thead>-->
+                      <!--<tbody>-->
+                      <!--<tr>-->
+                          <!--<td>贤心</td>-->
+                          <!--<td>2016-11-29</td>-->
+                          <!--<td>人生就像是一场修行</td>-->
+                      <!--</tr>-->
+                      <!--<tr>-->
+                          <!--<td>许闲心</td>-->
+                          <!--<td>2016-11-28</td>-->
+                          <!--<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>-->
+                      <!--</tr>-->
+                      <!--</tbody>-->
+                  </table>
+              </div>
+              <!-- 右侧内容框架，更改从这里结束 -->
+          </div>
+        </div>
+        <!-- 右侧主体结束 -->
+    </div>
+    <!-- 中部结束 -->
+    <!-- 底部开始 -->
+    <div class="footer">
+
+    </div>
+    <!-- 底部结束 -->
+    <!-- 背景切换开始 -->
+	<div class="bg-changer"></div>
+    <!-- 背景切换结束 -->
+    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+    <script>
+        //引入公共部分
+//        $(".left-nav").load("inc/leftMenu");
+        $(".header").load("inc/header");
+        $(".bg-changer").load("inc/bgChange");
+    </script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
+    <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/xadmin.js"></script>
+    <script type="text/javascript" src="../static/js/index.js"></script>
+    <script type="text/javascript" src="../static/js/city/city.js"></script>
+    <script>
+        (function () {
+            $(".more").on('mouseover',function () {
+                $(".layui-table").show();
+            })
+            $(".more").on('mouseout',function () {
+                $(".layui-table").hide();
+            })
+            function provinceInit(){
+                var optionProvince = '<option value="">请选择一个城市</option>'
+                $.each(zNodes,function (i,val) {
+                    if(val["pId"]=="-1"){
+                        optionProvince+='<option value="'+val.name+'">'+val.name+'</option>'
+                    }
+                })
+
+                $("#city1").append(optionProvince);
+                $("#city2").append(optionProvince);
+            }
+            provinceInit();
+            $("#search").on("click",function(){
+                var p1 = $("#city1").val().slice(0,2);
+                var p2 = $("#city2").val().slice(0,2);
+                $(".center").hide();
+                if(p1==""||p2==""){
+                    alert("请输入搜索内容");
+                }
+                var data={
+                    p1:p1,
+                    p2:p2
+                };
+                $.ajax({
+                    type:'get',
+                    url:'/duubleRd',
+                    data:data,
+                    headers:{"Content-Type":"application/json"},
+                    dataType:'json',
+                    success:function(ret){
+                        var inforList=ret.elements[0].slice(0,7);
+                        var inforList1=ret.elements[0];
+                        var inforList2=ret.elements[1];
+                        var li="";
+                        var th='<colgroup><col width="150"><col width="200"><col></colgroup><thead class="thead"><tr><th>名称</th>'+
+                            '<th>'+p1+'</th>'+
+                            '<th>'+p2+'</th></tr></thead><tbody>';
+                        var num1,num2,count=0;
+                        for(var i=0;i<inforList1.length;i++){
+                            num1 = parseFloat(inforList1[i]['rate'])*100;
+                            num2 = parseFloat(inforList2[i]['rate'])*100;
+                            if(Math.abs(num1-num2)<20){
+                                th+='<tr><td>'+inforList1[i]['yaocai_name']+'</td><td>'+num1.toFixed(2)+'%</td><td>'+num2.toFixed(2)+'%</td></tr>';
+                                count++;
+                            }
+                            if(count==10) break;
+                        }
+                        th+='</tbody>';
+                        $(".layui-table").html(th);
+                        $.each(inforList,function (i,val) {
+                            li+='<span>'+val['yaocai_name']+',</span>';
+                        })
+                        $(".p").html(li);
+                        $(".c1").html(p1);
+                        $(".c2").html(p2);
+
+                        $(".progress").show();
+                        $(".progress_1").css('width',"100%");
+                        setTimeout(function () {
+                            $(".progress").hide();
+                            $(".center").show();
+                            $(".progress_1").css('width',"0%");
+                        },1000)
+
+                    }
+                })
+            })
+        })()
+    </script>
+    <script type="text/javascript" src="../static/lib/layui/layui.js"></script>
+</body>
+</html>

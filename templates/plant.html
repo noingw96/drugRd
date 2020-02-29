@@ -280,6 +280,7 @@
 <script type="text/javascript" src="../static/js/plantjs/echarts-china-provinces/jiangsu.js"></script>
 <script type="text/javascript" src="../static/js/plantjs/echarts-china-cities/jiang1_su1_su1_zhou1.js"></script>
 <script type="text/javascript" src="../static/js/plantjs/echarts-china-counties/jiang1su1_su1zhou1_kun1shan1shi4.js"></script>
+<script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 <script type="text/javascript">
     $(function() {
         /******************* 地图飞线 ******************/
@@ -541,7 +542,7 @@
             var keyword = $("#drugname").val();
             var province = $("#province").val();
             var number = $("#shuliang").val()||"1000";
-            var trans = $("#trans").val()||"500";
+            var trans = $("#trans").val()||"80";
             var city = $("#city").val();
             var town = $("#town").val();
             console.log(number,trans);
@@ -741,6 +742,9 @@
         }
         provinceInit();
     });
+
 </script>
+
+
 </body>
 </html>
