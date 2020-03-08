@@ -1,7 +1,7 @@
 # -*- encoding:utf-8 -*-
 from flask import Flask,jsonify,render_template,request
 from py2neo import Graph
-from package import SimRd,GetInfor,ProvinceDict,PlantRd,PositionRd
+from package import SimRd,GetInfor,ProvinceDict,PlantRd,PositionRd,LirunRd2
 import time
 import MySQLdb
 import json
@@ -10,10 +10,24 @@ app = Flask(__name__)
 db = MySQLdb.connect("127.0.0.1", "root", "root", "bishe", charset='utf8')
 
 #一、页面方法
+#请求经济收益推荐
+@app.route('/PriceRd',methods=['POST','GET'])
+def PriceRd():
+    request_data = request.args.get("name")
+    try:
+        price_line = LirunRd2.gitAllPirce(request_data)
+        return jsonify(elements=price_line)
+    except:
+        errMessage ={
+            "errCode":"3005",
+            "Message":"暂无此数据"
+        }
+        return jsonify(elements=errMessage)
+
 #请求药材地区的推荐内容
 @app.route('/positionRd',methods=['POST','GET'])
 def positionRd():
-    request_data = request.args.get("content")
+    request_data = request.args.get("p3")
     try:
         myresult = PositionRd.main(request_data)  # h获取相似地区
         return jsonify(elements=myresult)

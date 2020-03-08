@@ -45,6 +45,10 @@
             justify-content: center;
             align-items: center;
         }
+        .flex2{
+            text-align: center;
+            margin-top:50px;
+        }
         .center{
             text-align: center;
             font-size: 20px;
@@ -87,6 +91,17 @@
         .layui-table th {
             text-align: center;
         }
+        .ul_result li{
+            display: none;
+        }
+        .map{
+            display: inline-block;
+            margin: 30px 100px;
+            height: 300px;
+            width: 400px;
+            position: relative;
+            transform: scale(1.0);
+        }
     </style>
 </head>
 <body>
@@ -107,51 +122,41 @@
                   <li class="active">地区对比</li>
                   <li>地区推荐</li>
               </ul>
-              <div class="flex1">
-                  <select name="city1" lay-verify="" id="city1">
-                  </select>
-                  <select name="city2" lay-verify="" id="city2">
-                  </select>
-                  <button type="button" class="layui-btn" id="search">地区对比</button>
-              </div>
-              <div class="progress">
-                  <div class="progress_1"></div>
-              </div>
-              <div class="center">
-                  <p>农户在<span class="c1"></span>地区与<span class="c2"></span>地区种植</p>
-                  <p class="p">
-                      <!--<span>人参</span>-->
-                      <!--<span>人参</span>-->
-                      <!--<span>人参</span>-->
-                  </p>
-                  <p>这几类药材情况相似</p>
-                  <p class="more">显示详情>></p>
-                  <table class="layui-table">
-                      <!--<colgroup>-->
-                          <!--<col width="150">-->
-                          <!--<col width="150">-->
-                          <!--<col>-->
-                      <!--</colgroup>-->
-                      <!--<thead class="thead">-->
-                      <!--<tr>-->
-                          <!--<th>名称</th>-->
-                          <!--<th>北京</th>-->
-                          <!--<th>上海</th>-->
-                      <!--</tr>-->
-                      <!--</thead>-->
-                      <!--<tbody>-->
-                      <!--<tr>-->
-                          <!--<td>贤心</td>-->
-                          <!--<td>2016-11-29</td>-->
-                          <!--<td>人生就像是一场修行</td>-->
-                      <!--</tr>-->
-                      <!--<tr>-->
-                          <!--<td>许闲心</td>-->
-                          <!--<td>2016-11-28</td>-->
-                          <!--<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>-->
-                      <!--</tr>-->
-                      <!--</tbody>-->
-                  </table>
+              <div class="ul_result">
+                  <li style="display: block">
+                      <div class="flex1">
+                          <select name="city1" lay-verify="" id="city1">
+                          </select>
+                          <select name="city2" lay-verify="" id="city2">
+                          </select>
+                          <button type="button" class="layui-btn" id="search">地区对比</button>
+                      </div>
+                      <div class="progress">
+                          <div class="progress_1"></div>
+                      </div>
+                      <div class="center">
+                          <p>农户在<span class="c1"></span>地区与<span class="c2"></span>地区种植</p>
+                          <p class="p">
+                          </p>
+                          <p>这几类药材情况相似</p>
+                          <p class="more">显示详情>></p>
+                          <table class="layui-table">
+                          </table>
+                      </div>
+                  </li>
+                  <li>
+                      <div class="flex2">
+                          <select name="city2" lay-verify="" id="city3">
+                          </select>
+                          <button type="button" class="layui-btn" id="positionRd">地区推荐</button>
+                          <div class="all_map">
+                              <div class="map" id="map1"></div>
+                              <div class="map" id="map2"></div>
+                              <div class="map" id="map3"></div>
+                              <div class="map" id="map4"></div>
+                          </div>
+                      </div>
+                  </li>
               </div>
               <!-- 右侧内容框架，更改从这里结束 -->
           </div>
@@ -176,11 +181,129 @@
     </script>
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
     <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/echarts.min.js"></script>
     <script type="text/javascript" src="../static/js/xadmin.js"></script>
     <script type="text/javascript" src="../static/js/index.js"></script>
     <script type="text/javascript" src="../static/js/city/city.js"></script>
     <script>
         (function () {
+            const map1 = echarts.init(document.getElementById("map1"));
+            const map2 = echarts.init(document.getElementById("map2"));
+            const map3 = echarts.init(document.getElementById("map3"));
+            const map4 = echarts.init(document.getElementById("map4"));
+            var option = {
+                title: {
+                    text: '地区相似情况对比'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: [],
+                    x:'right'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: []
+                },
+                yAxis: {
+                    type: 'value'
+                },
+            };
+            $("#positionRd").on("click",function(){
+                var p3 = $("#city3").val().slice(0,2);
+                if(p3==""){
+                    alert("请输入搜索内容");
+                }
+                var data={
+                    p3:p3,
+                };
+                $.ajax({
+                    type:'get',
+                    url:'/positionRd',
+                    data:data,
+                    headers:{"Content-Type":"application/json"},
+                    dataType:'json',
+                    success:function(ret){
+                       var data = ret.elements;
+                       var x_data=[],y_data_1=[],y_data_2=[],i=0;
+                       var option1={},option2={},option3={},option4={};
+                       for(let j=0;j<data.length;j++){
+                           const item = data[j];
+                           const index = j;
+                           option.title.text = item.position + '-'+item.similar_position+'地区相似情况对比';
+                           x_data=[];
+                           y_data_1=[];
+                           y_data_2=[];
+                           for(let i=0;i<item.origin.length;i++){
+                               if(y_data_1.length===10){
+                                   break;
+                               }
+                               if(Math.abs(item.origin[i]['rate']-item.similar[i]['rate'])>0.3){
+                                   continue;
+                               }
+                               x_data.push(item.origin[i]['yaocai_name']);
+                               y_data_1.push(parseFloat(item.origin[i]['rate']));
+                               y_data_2.push(parseFloat(item.similar[i]['rate']));
+                           }
+                           option.legend.data=[item.position,item.similar_position];
+                           option.xAxis.data =x_data;
+                           option.series = [
+                               {
+                                   name: item.position,
+                                   type: 'line',
+                                   data: y_data_1
+                               },
+                               {
+                                   name: item.similar_position,
+                                   type: 'line',
+                                   data: y_data_2
+                               }
+                           ];
+                           switch(index){
+                               case 0:$.extend(true,option1, option);break;
+                               case 1:$.extend(true,option2, option);break;
+                               case 2:$.extend(true,option3, option);break;
+                               case 3:$.extend(true,option4, option);break;
+                               default:break;
+                           }
+                       }
+                       if(option1.series[0].data.length>3){
+                           map1.setOption(option1);
+                       }
+                        if(option2.series[0].data.length>3){
+                            map2.setOption(option2);
+                        }
+                        if(option3.series[0].data.length>3){
+                            map3.setOption(option3);
+                        }
+                        if(option4.series[0].data.length>3){
+                            map4.setOption(option4);
+                        }
+//                        map1.setOption(option1);
+//                        map2.setOption(option2);
+//                        map3.setOption(option3);
+//                        map4.setOption(option4);
+                    }
+                })
+            })
+            $(".ul_title").on('click','li',function (e) {
+                var index = $(this).index()
+                $(".ul_title li").eq(index).addClass('active').siblings().removeClass('active');
+                $(".ul_result li").eq(index).show().siblings().hide();
+            })
             $(".more").on('mouseover',function () {
                 $(".layui-table").show();
             })
@@ -197,6 +320,7 @@
 
                 $("#city1").append(optionProvince);
                 $("#city2").append(optionProvince);
+                $("#city3").append(optionProvince);
             }
             provinceInit();
             $("#search").on("click",function(){

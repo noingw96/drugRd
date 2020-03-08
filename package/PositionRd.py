@@ -139,9 +139,9 @@ def main(key):
     the_max = 0.4
     erwei_train = search(key, "erwei_train", True, the_max, the_min)
     data = getYaocai(erwei_train,0.1,1,key)
-    for i in data:
-        print(i)
-    # return data
+    # for i in data:
+    #     print(i)
+    return data
 
 def doublePosition(p1,p2):
     the_min = 0.05
